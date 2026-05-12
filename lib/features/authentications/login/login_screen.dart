@@ -1,5 +1,6 @@
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/routesManager.dart';
+import 'package:awn/core/widget/custom_text_button.dart';
 import 'package:awn/core/widget/gradient_button.dart';
 import 'package:awn/core/widget/login_header.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
           child: Stack(
             children: [
               LoginHeader(
@@ -61,7 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       SizedBox(height: 20),
 
-                      // Email
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
@@ -190,29 +193,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ],
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                RoutesManager.forgetPassword,
-                              );
-                            },
-                            child: Text(
-                              "Forget Password?",
-                              style: GoogleFonts.inter(
-                                fontSize: 16,
-                                decoration: TextDecoration.underline,
-                                decorationColor: ColorsManager.green,
-                                color: ColorsManager.green,
-                              ),
-                            ),
-                          ),
+                          CustomTextButton(
+                              text: "Forget Password?", onPressed: () {
+                            Navigator.pushNamed(
+                                context, RoutesManager.forgetPassword);
+                          })
                         ],
                       ),
 
                       SizedBox(height: 16),
-
-                      // Sign In Button
                       GradientButton(
                         text: "Sign in",
                         onTap: () {

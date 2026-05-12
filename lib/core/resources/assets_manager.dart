@@ -8,5 +8,6 @@ abstract class AssetsManager {
   static const forgetpassword1 = "$base/forgetpassword1.svg";
   static const forgetpassword2 = "$base/forgetpassword2.svg";
   static const forgetpassword3 = "$base/forgetpassword3.svg";
+  static const wavinghand = "$base/wavinghand.svg";
 
 }

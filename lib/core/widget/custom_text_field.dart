@@ -28,6 +28,7 @@ class CustomTextField extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
+      width: 320,
       decoration: BoxDecoration(
         color: isDark ? ColorsManager.green : ColorsManager.col,
         borderRadius: BorderRadius.circular(30),
