@@ -1,6 +1,7 @@
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/resources/colors_manager.dart';
 import 'package:awn/features/authentications/login/login_screen.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -30,6 +31,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -43,23 +46,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             children: [
               OnboardPage(
                 image: AssetsManager.onboarding1,
-                title: "Learn Smarter with One Snap!",
-                description:
-                    "Take a picture and let the app tell you what it’s all about",
+                title: l.onboard1Title,
+                description: l.onboard1Desc,
                 onSkip: _goToLogin,
               ),
               OnboardPage(
                 image: AssetsManager.onboarding2,
-                title: "Instant Understanding",
-                description:
-                    "Get the main idea of any page in seconds no reading needed",
+                title: l.onboard2Title,
+                description: l.onboard2Desc,
                 onSkip: _goToLogin,
               ),
               OnboardPage(
                 image: AssetsManager.onboarding3,
-                title: "Learn More, Watch More!",
-                description:
-                    "Discover short YouTube videos that explain your image topic clearly",
+                title: l.onboard3Title,
+                description: l.onboard3Desc,
                 onSkip: _goToLogin,
               ),
             ],
@@ -112,7 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Text(
-                  isLastPage ? "Get Started" : "Next",
+                  isLastPage ? l.getStarted : l.next,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,

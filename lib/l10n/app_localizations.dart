@@ -107,8 +107,14 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:
-  /// **'Welcome Back'**
+  /// **'Welcome \n Back'**
   String get welcomeBack;
+
+  /// No description provided for @pleaseSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in to continue'**
+  String get pleaseSignIn;
 
   /// No description provided for @signIn.
   ///
@@ -128,17 +134,17 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get password;
 
-  /// No description provided for @forgetPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Forget Password?'**
-  String get forgetPassword;
-
   /// No description provided for @rememberMe.
   ///
   /// In en, this message translates to:
   /// **'Remember me'**
   String get rememberMe;
+
+  /// No description provided for @forgetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget Password?'**
+  String get forgetPassword;
 
   /// No description provided for @continueAsGuest.
   ///
@@ -149,7 +155,7 @@ abstract class AppLocalizations {
   /// No description provided for @dontHaveAccount.
   ///
   /// In en, this message translates to:
-  /// **'Don\'t have an account?'**
+  /// **'Don\'t have an account? '**
   String get dontHaveAccount;
 
   /// No description provided for @signUp.
@@ -157,6 +163,378 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign up'**
   String get signUp;
+
+  /// No description provided for @or.
+  ///
+  /// In en, this message translates to:
+  /// **'Or'**
+  String get or;
+
+  /// No description provided for @enterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Your Email'**
+  String get enterEmail;
+
+  /// No description provided for @validEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter valid email'**
+  String get validEmail;
+
+  /// No description provided for @enterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Your Password'**
+  String get enterPassword;
+
+  /// No description provided for @passwordLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 chars'**
+  String get passwordLength;
+
+  /// No description provided for @onboard1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn Smarter with One Snap!'**
+  String get onboard1Title;
+
+  /// No description provided for @onboard1Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a picture and let the app tell you what it\'s all about'**
+  String get onboard1Desc;
+
+  /// No description provided for @onboard2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant Understanding'**
+  String get onboard2Title;
+
+  /// No description provided for @onboard2Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get the main idea of any page in seconds no reading needed'**
+  String get onboard2Desc;
+
+  /// No description provided for @onboard3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn More, Watch More!'**
+  String get onboard3Title;
+
+  /// No description provided for @onboard3Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover short YouTube videos that explain your image topic clearly'**
+  String get onboard3Desc;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @pleaseRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Please register to continue'**
+  String get pleaseRegister;
+
+  /// No description provided for @username.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get username;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get confirmPassword;
+
+  /// No description provided for @enterUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Your Username'**
+  String get enterUsername;
+
+  /// No description provided for @confirmPasswordError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Confirm Your Password'**
+  String get confirmPasswordError;
+
+  /// No description provided for @passwordsNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords don\'t match'**
+  String get passwordsNotMatch;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? '**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create\nAccount'**
+  String get registerTitle;
+
+  /// No description provided for @forgetPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget Password'**
+  String get forgetPasswordTitle;
+
+  /// No description provided for @forgetPasswordDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Your Email Address To\nReceive a Verification Code'**
+  String get forgetPasswordDesc;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPassword;
+
+  /// No description provided for @verifyPasswordDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your New Password Must Be Different\nFrom Previously Used Password'**
+  String get verifyPasswordDesc;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Password'**
+  String get enterNewPassword;
+
+  /// No description provided for @passwordMin8.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordMin8;
+
+  /// No description provided for @passwordMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must match'**
+  String get passwordMatch;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @mailSentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter The 4 Digit Code\nSent To Your Email'**
+  String get mailSentDesc;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @verify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get verify;
+
+  /// No description provided for @hiUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, Eman 👋'**
+  String get hiUser;
+
+  /// No description provided for @readyToLearn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to learn something new today'**
+  String get readyToLearn;
+
+  /// No description provided for @scanPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a Page'**
+  String get scanPage;
+
+  /// No description provided for @scanPageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture a page and get its summary instantly'**
+  String get scanPageSubtitle;
+
+  /// No description provided for @uploadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Image or File'**
+  String get uploadFile;
+
+  /// No description provided for @uploadFileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an image or PDF from your phone to summarize'**
+  String get uploadFileSubtitle;
+
+  /// No description provided for @favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
+
+  /// No description provided for @noFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get noFavorites;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @editName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get editName;
+
+  /// No description provided for @editEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get editEmail;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logOut;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
+
+  /// No description provided for @result.
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get result;
+
+  /// No description provided for @mainTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Main Topic:'**
+  String get mainTopic;
+
+  /// No description provided for @summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary:'**
+  String get summary;
+
+  /// No description provided for @watchVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch related videos:'**
+  String get watchVideos;
+
+  /// No description provided for @hiEman.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, Eman 👋'**
+  String get hiEman;
+
+  /// No description provided for @learnSmarter.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn smarter,\nnot harder. 💡'**
+  String get learnSmarter;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @favoritesList.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favoritesList;
+
+  /// No description provided for @historyList.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyList;
+
+  /// No description provided for @profileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileLabel;
+
+  /// No description provided for @logOutUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'LOG OUT'**
+  String get logOutUpper;
 }
 
 class _AppLocalizationsDelegate

@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageProvider extends ChangeNotifier {
-  Locale _locale = const Locale('en');
+  Locale _locale = const Locale('ar');
+
+
+  Future<void> setLanguage(String langCode) async {
+    _locale = Locale(langCode);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language', langCode);
+    notifyListeners();
+  }
 
   Locale get locale => _locale;
-  bool get isArabic => _locale.languageCode == 'ar';
+  bool get isArabic => _locale.languageCode == 'en';
 
   LanguageProvider() {
     _loadSavedLanguage();

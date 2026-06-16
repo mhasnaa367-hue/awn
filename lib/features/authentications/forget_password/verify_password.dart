@@ -2,6 +2,7 @@ import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/custom_text_field.dart';
 import 'package:awn/core/widget/gradient_button.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,34 +19,36 @@ class VerifyPassword extends StatefulWidget {
 
 class _VerifyPasswordState extends State<VerifyPassword> {
   final _formKey = GlobalKey<FormState>();
-
   bool _obscurePassword = true;
-
+  bool _obscureConfirm = true;
   final _passwordController = TextEditingController();
+  final _confirmController = TextEditingController();
 
   @override
   void dispose() {
     _passwordController.dispose();
+    _confirmController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              Appbar(title: "Forget Password"),
+              Appbar(title: l.forgetPasswordTitle),
 
-              SvgPicture.asset(
-                AssetsManager.forgetpassword3,
-              ),
+              SvgPicture.asset(AssetsManager.forgetpassword3),
+
               const SizedBox(height: 50),
 
               Text(
-                "Your New Password Must Be Different\nFrom Previously Used Password",
+                l.verifyPasswordDesc,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   color: Theme.of(context).colorScheme.onSurface,
@@ -59,16 +62,16 @@ class _VerifyPasswordState extends State<VerifyPassword> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomTextField(
-                  hintText: "New password",
+                  hintText: l.newPassword,
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   prefixIcon: Icons.lock_outline_rounded,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please Enter Password";
+                      return l.enterNewPassword;
                     }
                     if (value.length < 8) {
-                      return "Password must be at least 8 characters";
+                      return l.passwordMin8;
                     }
                     return null;
                   },
@@ -87,41 +90,52 @@ class _VerifyPasswordState extends State<VerifyPassword> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 20),
-              CustomTextField(
-                hintText: "Confirm password",
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                prefixIcon: Icons.lock_outline_rounded,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please Enter Password";
-                  }
-                  if (value.length < 8) {
-                    return "Password must be match the";
-                  }
-                  return null;
-                },
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscurePassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: ColorsManager.darkGray,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomTextField(
+                  hintText: l.confirmPassword,
+                  controller: _confirmController,
+                  obscureText: _obscureConfirm,
+                  prefixIcon: Icons.lock_outline_rounded,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return l.enterNewPassword;
+                    }
+                    if (value != _passwordController.text) {
+                      return l.passwordMatch;
+                    }
+                    return null;
                   },
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureConfirm
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: ColorsManager.darkGray,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirm = !_obscureConfirm;
+                      });
+                    },
+                  ),
                 ),
               ),
-              SizedBox(height: 50,),
+
+              const SizedBox(height: 50),
+
               GradientButton(
-                  width: 320,
-                  text: "Save", onTap: () {
-                Navigator.pushNamed(context, RoutesManager.homeScreen);
-              })
+                width: 320,
+                text: l.save,
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.pushNamed(context, RoutesManager.homeScreen);
+                  }
+                },
+              ),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:awn/core/resources/colors_manager.dart';
 import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/app_drawer.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,10 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
       key: _scaffoldKey,
-      // ✅ اتحذفت backgroundColor
       drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
@@ -37,16 +38,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(
                     Icons.list,
                     size: 30,
-                    color: colorScheme.onSurface, // ✅
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(width: 75),
                 Text(
-                  "Hi, Eman 👋",
+                  l.hiUser,
                   style: GoogleFonts.inter(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
-                    color: ColorsManager.green, // أخضر دايماً
+                    color: ColorsManager.green,
                   ),
                 ),
               ],
@@ -54,11 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
             Column(
               children: [
                 Text(
-                  "Ready to learn something new today",
+                  l.readyToLearn,
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: colorScheme.onSurface.withOpacity(0.5), // ✅
+                    color: colorScheme.onSurface.withOpacity(0.5),
                   ),
                 ),
               ],
@@ -66,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 120),
             _ActionCard(
               icon: Icons.camera_alt_outlined,
-              title: 'Scan a Page',
-              subtitle: 'Capture a page and get its summary instantly',
+              title: l.scanPage,
+              subtitle: l.scanPageSubtitle,
               onTap: () {
                 Navigator.pushNamed(context, RoutesManager.camera);
               },
@@ -75,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 14),
             _ActionCard(
               icon: Icons.upload_outlined,
-              title: 'Upload Image or File',
-              subtitle: 'Choose an image or PDF from your phone to summarize',
+              title: l.uploadFile,
+              subtitle: l.uploadFileSubtitle,
               onTap: () async {
                 final status = await Permission.storage.request();
 

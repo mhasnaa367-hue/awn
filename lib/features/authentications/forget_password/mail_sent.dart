@@ -3,6 +3,7 @@ import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/custom_text_button.dart';
 import 'package:awn/core/widget/gradient_button.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,10 +16,12 @@ class MailSent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Column(
         children: [
-          Appbar(title: "Forget password"),
+          Appbar(title: l.forgetPasswordTitle),
 
           const SizedBox(height: 30),
 
@@ -27,7 +30,7 @@ class MailSent extends StatelessWidget {
           const SizedBox(height: 50),
 
           Text(
-            "Please Enter The 4 Digit Code\nSent To Your Email",
+            l.mailSentDesc,
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               color: Theme.of(context).colorScheme.onSurface,
@@ -45,7 +48,7 @@ class MailSent extends StatelessWidget {
           const SizedBox(height: 60),
 
           CustomTextButton(
-            text: "Resend code",
+            text: l.resendCode,
             onPressed: () {},
           ),
 
@@ -53,12 +56,9 @@ class MailSent extends StatelessWidget {
 
           GradientButton(
             width: 350,
-            text: "Verify",
+            text: l.verify,
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                RoutesManager.verifyPassword,
-              );
+              Navigator.pushNamed(context, RoutesManager.verifyPassword);
             },
           ),
         ],

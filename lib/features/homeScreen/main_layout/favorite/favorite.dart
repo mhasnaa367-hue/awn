@@ -1,8 +1,8 @@
 import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/document_card.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:awn/core/resources/colors_manager.dart';
 
 import '../../../../core/widget/favorites_provider.dart';
 
@@ -11,18 +11,20 @@ class Favorite extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Column(
         children: [
-          Appbar(title: "Favorites"),
+          Appbar(title: l.favorites),
           Expanded(
             child: Consumer<FavoritesProvider>(
               builder: (context, provider, _) {
                 final favorites = provider.favorites;
 
                 if (favorites.isEmpty) {
-                  return const Center(
-                    child: Text('No favorites yet'),
+                  return Center(
+                    child: Text(l.noFavorites),
                   );
                 }
 

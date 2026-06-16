@@ -6,8 +6,7 @@ import 'package:awn/core/widget/login_header.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/resources/colors_manager.dart';
-import '../../../l10n/app_localizations.dart';
-
+import 'package:awn/l10n/app_localizations.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -56,12 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        l.signIn,
-                        style: GoogleFonts.inter(
-                          color: ColorsManager.green,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 32,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Text(
+                          l.signIn,
+                          style: GoogleFonts.inter(
+                            color: ColorsManager.green,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 32,
+                          ),
                         ),
                       ),
 

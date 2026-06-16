@@ -1,6 +1,7 @@
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/resources/colors_manager.dart';
 import 'package:awn/core/widget/Appbar.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +20,14 @@ class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
-       body: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Appbar(
-              title: "Result",
+              title: l.result,
               actions: Consumer<FavoritesProvider>(
                 builder: (context, provider, _) {
                   final isFav = provider.isFavorite("Result");
@@ -69,7 +71,7 @@ class _ResultState extends State<Result> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Main Topic:",
+                      l.mainTopic,
                       style: GoogleFonts.inter(
                         color: colorScheme.onSurface,
                         fontSize: 20,
@@ -94,7 +96,7 @@ class _ResultState extends State<Result> {
                     ),
                     const SizedBox(height: 40),
                     Text(
-                      "Summary:",
+                      l.summary,
                       style: GoogleFonts.inter(
                         color: colorScheme.onSurface,
                         fontSize: 20,
@@ -120,7 +122,7 @@ class _ResultState extends State<Result> {
                     ),
                     const SizedBox(height: 40),
                     Text(
-                      "Watch related videos:",
+                      l.watchVideos,
                       style: GoogleFonts.inter(
                         color: colorScheme.onSurface,
                         fontSize: 20,

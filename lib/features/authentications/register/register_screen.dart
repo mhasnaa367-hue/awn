@@ -1,6 +1,7 @@
 import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/login_header.dart';
 import 'package:awn/core/widget/gradient_button.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/resources/colors_manager.dart';
@@ -111,6 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -119,8 +121,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Stack(
             children: [
               LoginHeader(
-                title: "Welcome\nBack",
-                text: "Please register to continue",
+                title: l.registerTitle,
+                text: l.pleaseRegister,
               ),
               Positioned(
                 top: 250,
@@ -136,11 +138,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _buildField(
                         context,
                         controller: _usernameController,
-                        hint: "Username",
+                        hint: l.username,
                         prefixIcon: Icons.person_outline,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please Enter Your Username";
+                            return l.enterUsername;
                           }
                           return null;
                         },
@@ -151,15 +153,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _buildField(
                         context,
                         controller: _emailController,
-                        hint: "Email",
+                        hint: l.email,
                         prefixIcon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please Enter Your Email";
+                            return l.enterEmail;
                           }
                           if (!value.contains("@")) {
-                            return "Enter valid email";
+                            return l.validEmail;
                           }
                           return null;
                         },
@@ -170,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _buildField(
                         context,
                         controller: _passwordController,
-                        hint: "Password",
+                        hint: l.password,
                         prefixIcon: Icons.lock_outline,
                         isPassword: true,
                         obscure: _obscurePassword,
@@ -181,10 +183,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please Enter Your Password";
+                            return l.enterPassword;
                           }
                           if (value.length < 6) {
-                            return "Password must be at least 6 chars";
+                            return l.passwordLength;
                           }
                           return null;
                         },
@@ -195,7 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _buildField(
                         context,
                         controller: _confirmController,
-                        hint: "Confirm password",
+                        hint: l.confirmPassword,
                         prefixIcon: Icons.lock_outline,
                         isPassword: true,
                         obscure: _obscureConfirm,
@@ -206,19 +208,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please Confirm Your Password";
+                            return l.confirmPasswordError;
                           }
                           if (value != _passwordController.text) {
-                            return "Passwords don't match";
+                            return l.passwordsNotMatch;
                           }
                           return null;
                         },
                       ),
 
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       GradientButton(
-                        text: "Sign Up",
+                        text: l.register,
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             Navigator.pushNamed(
@@ -227,14 +229,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Already have an account? ",
+                              l.alreadyHaveAccount,
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 color: colorScheme.onSurface,
@@ -246,7 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     context, RoutesManager.loginsrceen);
                               },
                               child: Text(
-                                "Sign in",
+                                l.signIn,
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   color: ColorsManager.green,

@@ -1,4 +1,5 @@
 import 'package:awn/core/routesManager.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../resources/colors_manager.dart';
 
@@ -15,36 +16,36 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l = AppLocalizations.of(context)!;
 
     return Drawer(
-      // ✅ خلفية الـ drawer من الـ theme
       backgroundColor: colorScheme.surface,
       child: Column(
         children: [
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: ColorsManager.green, // أخضر دايماً
+              color: ColorsManager.green,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'Hi, Eman 👋',
-                      style: TextStyle(
-                        color: Colors.white, // أبيض دايماً فوق الأخضر
+                      l.hiEman,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      'Learn smarter,\nnot harder. 💡',
-                      style: TextStyle(
+                      l.learnSmarter,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 13,
                         height: 1.5,
@@ -52,7 +53,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     ),
                   ],
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 28,
                   backgroundImage: NetworkImage(
                     'https://i.pravatar.cc/100?img=11',
@@ -62,10 +63,10 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
 
-          _buildNavItem(icon: Icons.home, label: 'Home'),
-          _buildNavItem(icon: Icons.favorite_border_outlined, label: 'Favorites'),
-          _buildNavItem(icon: Icons.history, label: 'History'),
-          _buildNavItem(icon: Icons.account_circle_outlined, label: 'Profile'),
+          _buildNavItem(icon: Icons.home, label: l.home, key: 'Home'),
+          _buildNavItem(icon: Icons.favorite_border_outlined, label: l.favoritesList, key: 'Favorites'),
+          _buildNavItem(icon: Icons.history, label: l.historyList, key: 'History'),
+          _buildNavItem(icon: Icons.account_circle_outlined, label: l.profileLabel, key: 'Profile'),
 
           const Spacer(),
           Divider(color: colorScheme.outline.withOpacity(0.3)),
@@ -77,9 +78,9 @@ class _AppDrawerState extends State<AppDrawer> {
                 RoutesManager.loginsrceen,
               );
             },
-            child: const Text(
-              'LOG OUT',
-              style: TextStyle(
+            child: Text(
+              l.logOutUpper,
+              style: const TextStyle(
                 color: Colors.red,
                 fontWeight: FontWeight.bold,
               ),
@@ -95,12 +96,13 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget _buildNavItem({
     required IconData icon,
     required String label,
+    required String key,
   }) {
-    final isActive = _activeItem == label;
+    final isActive = _activeItem == key;
     final colorScheme = Theme.of(context).colorScheme;
 
     return ListTile(
-       tileColor: isActive ? ColorsManager.green.withOpacity(0.1) : null,
+      tileColor: isActive ? ColorsManager.green.withOpacity(0.1) : null,
       leading: Icon(
         icon,
         color: isActive
@@ -110,26 +112,24 @@ class _AppDrawerState extends State<AppDrawer> {
       title: Text(
         label,
         style: TextStyle(
-          color: isActive
-              ? ColorsManager.green
-              : colorScheme.onSurface,
+          color: isActive ? ColorsManager.green : colorScheme.onSurface,
           fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
         ),
       ),
       onTap: () {
         setState(() {
-          _activeItem = label;
+          _activeItem = key;
         });
 
         Navigator.pop(context);
 
-        if (label == 'Home') {
+        if (key == 'Home') {
           Navigator.pushNamed(context, RoutesManager.homeScreen);
-        } else if (label == 'Favorites') {
+        } else if (key == 'Favorites') {
           Navigator.pushNamed(context, RoutesManager.favorite);
-        } else if (label == 'History') {
+        } else if (key == 'History') {
           Navigator.pushNamed(context, RoutesManager.history);
-        } else if (label == 'Profile') {
+        } else if (key == 'Profile') {
           Navigator.pushNamed(context, RoutesManager.profile);
         }
       },

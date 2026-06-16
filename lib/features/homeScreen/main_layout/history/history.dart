@@ -1,6 +1,6 @@
-import 'package:awn/core/resources/colors_manager.dart';
 import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/document_card.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class History extends StatelessWidget {
@@ -8,11 +8,13 @@ class History extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
     return Scaffold(
-       body: Column(
+      body: Column(
         children: [
-          Appbar(title: "History"),
-          SizedBox(height: 50),
+          Appbar(title: l.history),
+          const SizedBox(height: 50),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

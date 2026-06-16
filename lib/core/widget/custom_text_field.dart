@@ -33,13 +33,15 @@ class CustomTextField extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(30),
-        boxShadow: isDark ? [] : [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isDark
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: TextFormField(
         controller: controller,
@@ -59,10 +61,10 @@ class CustomTextField extends StatelessWidget {
           ),
           prefixIcon: prefixIcon != null
               ? Icon(
-            prefixIcon,
-            color: colorScheme.onSurface.withOpacity(0.5),
-            size: 20,
-          )
+                  prefixIcon,
+                  color: colorScheme.onSurface.withOpacity(0.5),
+                  size: 20,
+                )
               : null,
           suffixIcon: suffixIcon,
           filled: true,
@@ -80,17 +82,11 @@ class CustomTextField extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(
-              color: ColorsManager.green,
-              width: 1,
-            ),
+            borderSide: BorderSide(color: ColorsManager.green, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(
-              color: ColorsManager.green,
-              width: 1.5,
-            ),
+            borderSide: BorderSide(color: ColorsManager.green, width: 1.5),
           ),
         ),
       ),

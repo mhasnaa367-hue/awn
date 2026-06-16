@@ -23,6 +23,8 @@ class _OtpInputFieldState extends State<OtpInputField> {
   }
 
   Widget _buildBox(int i) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: ListenableBuilder(
@@ -30,18 +32,16 @@ class _OtpInputFieldState extends State<OtpInputField> {
         builder: (_, __) {
           final focused = _focusNodes[i].hasFocus;
           return Container(
-            width: 56, height: 56,
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
+              color: colorScheme.surface,
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(20),
-
               border: focused
-                  ? Border.all(
-                color: ColorsManager.green,
-                width: 1.5,
-              )
+                  ? Border.all(color: ColorsManager.green, width: 1.5)
                   : Border.all(
-                color: ColorsManager.exlightgray,
+                color: colorScheme.outline.withOpacity(0.3),
                 width: 1,
               ),
               boxShadow: [
@@ -56,7 +56,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
               style: TextStyle(
                 color: ColorsManager.green,
                 fontSize: 20,
-                fontWeight: FontWeight.w300
+                fontWeight: FontWeight.w300,
               ),
               controller: _controllers[i],
               focusNode: _focusNodes[i],
@@ -64,7 +64,8 @@ class _OtpInputFieldState extends State<OtpInputField> {
               keyboardType: TextInputType.number,
               maxLength: 1,
               decoration: const InputDecoration(
-                counterText: '', border: InputBorder.none,
+                counterText: '',
+                border: InputBorder.none,
               ),
               onChanged: (val) {
                 if (val.isNotEmpty && i < 3) {

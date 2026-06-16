@@ -94,7 +94,7 @@ class _DocumentCardState extends State<DocumentCard> {
             onPressed: () => Navigator.pushNamed(context, RoutesManager.result),
             icon: Icon(
               Icons.chevron_right,
-              color: colorScheme.onSurface.withOpacity(0.5), // ✅
+              color: colorScheme.onSurface.withOpacity(0.5),
             ),
           ),
 

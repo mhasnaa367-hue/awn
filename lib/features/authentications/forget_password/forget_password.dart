@@ -4,6 +4,7 @@ import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/custom_text_field.dart';
 import 'package:awn/core/widget/gradient_button.dart';
+import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,21 +14,22 @@ class ForgetPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Appbar(title: "Forget Password"),
+            Appbar(title: l.forgetPasswordTitle),
 
             SvgPicture.asset(AssetsManager.forgetpassword1),
 
             const SizedBox(height: 50),
 
             Text(
-              "Please Enter Your Email Address To\nReceive a Verification Code",
+              l.forgetPasswordDesc,
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
-                // ✅ بيبقى أبيض في dark وداكن في light أوتوماتيك
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -39,7 +41,7 @@ class ForgetPassword extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
-                hintText: "Email",
+                hintText: l.email,
                 prefixIcon: Icons.email_outlined,
               ),
             ),
@@ -48,7 +50,7 @@ class ForgetPassword extends StatelessWidget {
 
             GradientButton(
               width: 300,
-              text: "Send",
+              text: l.send,
               onTap: () {
                 Navigator.pushNamed(context, RoutesManager.mailSent);
               },
