@@ -1,5 +1,5 @@
 import 'package:awn/core/routesManager.dart';
-import 'package:awn/core/widget/bar_forgetpass.dart';
+import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/custom_text_field.dart';
 import 'package:awn/core/widget/gradient_button.dart';
 import 'package:flutter/material.dart';
@@ -32,16 +32,12 @@ class _VerifyPasswordState extends State<VerifyPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorsManager.white,
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-                child: BarForgetpass(),
-              ),
+              Appbar(title: "Forget Password"),
 
               SvgPicture.asset(
                 AssetsManager.forgetpassword3,
@@ -52,7 +48,7 @@ class _VerifyPasswordState extends State<VerifyPassword> {
                 "Your New Password Must Be Different\nFrom Previously Used Password",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
-                  color: ColorsManager.lightgray,
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),

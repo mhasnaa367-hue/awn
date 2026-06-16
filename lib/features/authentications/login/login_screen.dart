@@ -6,6 +6,7 @@ import 'package:awn/core/widget/login_header.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/resources/colors_manager.dart';
+import '../../../l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,18 +33,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
+          height: MediaQuery.of(context).size.height,
           child: Stack(
             children: [
               LoginHeader(
-                title: "Welcome \n Back",
-                text: "Please sign in to continue",
+                title: l.welcomeBack,
+                text: l.pleaseSignIn,
               ),
               Positioned(
                 top: 250,
@@ -55,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Sign In",
+                        l.signIn,
                         style: GoogleFonts.inter(
                           color: ColorsManager.green,
                           fontWeight: FontWeight.w500,
@@ -63,79 +65,93 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: colorScheme.surface,
                           borderRadius: BorderRadius.circular(25),
-                          boxShadow: [
+                          border: Border.all(color: ColorsManager.green, width: 1),
+                          boxShadow: isDark ? [] : [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.06),
                               blurRadius: 8,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
                         child: TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
+                          style: TextStyle(color: colorScheme.onSurface),
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.email_outlined,
-                              color: ColorsManager.darkGray,
+                              color: colorScheme.onSurface.withOpacity(0.5),
                             ),
-                            hintText: "Email",
+                            hintText: l.email,
                             hintStyle: GoogleFonts.inter(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
-                              color: ColorsManager.darkGray,
+                              color: colorScheme.onSurface.withOpacity(0.5),
                             ),
                             filled: true,
-                            fillColor: Colors.grey[200],
-                            border: InputBorder.none,
+                            fillColor: colorScheme.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please Enter Your Email";
+                              return l.enterEmail;
                             }
                             if (!value.contains("@")) {
-                              return "Enter valid email";
+                              return l.validEmail;
                             }
                             return null;
                           },
                         ),
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                      // Password
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: colorScheme.surface,
                           borderRadius: BorderRadius.circular(25),
-                          boxShadow: [
+                          border: Border.all(color: ColorsManager.green, width: 1),
+                          boxShadow: isDark ? [] : [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.06),
                               blurRadius: 8,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
                         child: TextFormField(
                           controller: _passwordController,
                           obscureText: _obscurePassword,
+                          style: TextStyle(color: colorScheme.onSurface),
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.lock_outline,
-                              color: ColorsManager.darkGray,
+                              color: colorScheme.onSurface.withOpacity(0.5),
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
-                                color: ColorsManager.darkGray,
+                                color: colorScheme.onSurface.withOpacity(0.5),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -143,29 +159,40 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               },
                             ),
-                            hintText: "Password",
+                            hintText: l.password,
                             hintStyle: GoogleFonts.inter(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
-                              color: ColorsManager.darkGray,
+                              color: colorScheme.onSurface.withOpacity(0.5),
                             ),
                             filled: true,
-                            fillColor: Colors.grey[200],
-                            border: InputBorder.none,
+                            fillColor: colorScheme.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please Enter Your Password";
+                              return l.enterPassword;
                             }
                             if (value.length < 6) {
-                              return "Password must be at least 6 chars";
+                              return l.passwordLength;
                             }
                             return null;
                           },
                         ),
                       ),
 
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -185,88 +212,67 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               Text(
-                                "Remember me",
+                                l.rememberMe,
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
-                                  color: ColorsManager.darkGray,
+                                  color: colorScheme.onSurface.withOpacity(0.7),
                                 ),
                               ),
                             ],
                           ),
                           CustomTextButton(
-                              text: "Forget Password?", onPressed: () {
-                            Navigator.pushNamed(
-                                context, RoutesManager.forgetPassword);
-                          })
+                            text: l.forgetPassword,
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, RoutesManager.forgetPassword);
+                            },
+                          ),
                         ],
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
+
                       GradientButton(
-                        text: "Sign in",
+                        text: l.signIn,
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            String email = _emailController.text;
-                            String password = _passwordController.text;
-
-                            print("Email: $email");
-                            print("Password: $password");
-
-                            Navigator.pushNamed(
-                                context, RoutesManager.homeScreen);
+                            Navigator.pushNamed(context, RoutesManager.homeScreen);
                           }
                         },
                       ),
 
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
                       Row(
                         children: [
-                          Expanded(
-                            child: Divider(
-                              color: ColorsManager.green,
-                              thickness: 1,
-                            ),
-                          ),
+                          Expanded(child: Divider(color: ColorsManager.green, thickness: 1)),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            child: Text("Or"),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(l.or, style: TextStyle(color: colorScheme.onSurface)),
                           ),
-                          Expanded(
-                            child: Divider(
-                              color: ColorsManager.green,
-                              thickness: 1,
-                            ),
-                          ),
+                          Expanded(child: Divider(color: ColorsManager.green, thickness: 1)),
                         ],
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       Center(
                         child: InkWell(
                           onTap: () {},
                           borderRadius: BorderRadius.circular(50),
-                          child: Image.asset(
-                            AssetsManager.google,
-                            height: 40,
-                            width: 40,
-                          ),
+                          child: Image.asset(AssetsManager.google, height: 40, width: 40),
                         ),
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       Center(
                         child: TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesManager.homeScreen,
-                            );
+                            Navigator.pushNamed(context, RoutesManager.homeScreen);
                           },
                           child: Text(
-                            "Continue as Guest",
+                            l.continueAsGuest,
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: ColorsManager.green,
@@ -281,21 +287,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Don't have an account? ",
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
+                              l.dontHaveAccount,
+                              style: GoogleFonts.inter(fontSize: 14, color: colorScheme.onSurface),
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  RoutesManager.registerScreen,
-                                );
+                                Navigator.pushNamed(context, RoutesManager.registerScreen);
                               },
                               child: Text(
-                                "Sign up",
+                                l.signUp,
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   color: ColorsManager.green,

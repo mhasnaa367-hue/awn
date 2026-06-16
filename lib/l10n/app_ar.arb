@@ -1,0 +1,13 @@
+{
+  "@@locale": "ar",
+  "appTitle": "عون",
+  "welcomeBack": "مرحباً بعودتك",
+  "signIn": "تسجيل الدخول",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "forgetPassword": "نسيت كلمة المرور؟",
+  "rememberMe": "تذكرني",
+  "continueAsGuest": "متابعة كضيف",
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "signUp": "إنشاء حساب"
+}

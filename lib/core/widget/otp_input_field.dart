@@ -33,7 +33,6 @@ class _OtpInputFieldState extends State<OtpInputField> {
             width: 56, height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: ColorsManager.white,
               borderRadius: BorderRadius.circular(20),
 
               border: focused

@@ -1,6 +1,6 @@
 import 'package:awn/core/resources/colors_manager.dart';
 import 'package:awn/core/routesManager.dart';
-import 'package:awn/core/widget/bar_forgetpass.dart';
+import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/custom_text_button.dart';
 import 'package:awn/core/widget/gradient_button.dart';
 import 'package:flutter/material.dart';
@@ -16,35 +16,51 @@ class MailSent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorsManager.white,
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-            child: BarForgetpass(),
-          ),
+          Appbar(title: "Forget password"),
+
+          const SizedBox(height: 30),
+
           SvgPicture.asset(AssetsManager.forgetpassword2),
-          SizedBox(height: 50),
+
+          const SizedBox(height: 50),
+
           Text(
-            "Please Enter The 4 Digit Code\n         Sent To Your Email",
+            "Please Enter The 4 Digit Code\nSent To Your Email",
+            textAlign: TextAlign.center,
             style: GoogleFonts.inter(
-              color: ColorsManager.lightgray,
+              color: Theme.of(context).colorScheme.onSurface,
               fontSize: 16,
               fontWeight: FontWeight.w400,
             ),
           ),
-          SizedBox(height: 50),
+
+          const SizedBox(height: 50),
+
           OtpInputField(
             onCompleted: (otp) {},
           ),
-          SizedBox(height: 60,),
-          CustomTextButton(text: "Resend code", onPressed: () {}),
-          SizedBox(height: 50,),
+
+          const SizedBox(height: 60),
+
+          CustomTextButton(
+            text: "Resend code",
+            onPressed: () {},
+          ),
+
+          const SizedBox(height: 50),
+
           GradientButton(
-              width: 350,
-              text: "Verify", onTap: () {
-            Navigator.pushNamed(context, RoutesManager.verifyPassword);
-          })
+            width: 350,
+            text: "Verify",
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                RoutesManager.verifyPassword,
+              );
+            },
+          ),
         ],
       ),
     );

@@ -34,25 +34,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  Widget _buildField({
-    required TextEditingController controller,
-    required String hint,
-    required IconData prefixIcon,
-    bool isPassword = false,
-    bool? obscure,
-    VoidCallback? onToggle,
-    TextInputType keyboardType = TextInputType.text,
-    String? Function(String?)? validator,
-  }) {
+  Widget _buildField(
+      BuildContext context, {
+        required TextEditingController controller,
+        required String hint,
+        required IconData prefixIcon,
+        bool isPassword = false,
+        bool? obscure,
+        VoidCallback? onToggle,
+        TextInputType keyboardType = TextInputType.text,
+        String? Function(String?)? validator,
+      }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [
+        border: Border.all(color: ColorsManager.green, width: 1),
+        boxShadow: isDark ? [] : [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
             blurRadius: 8,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -60,15 +65,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         controller: controller,
         obscureText: isPassword ? (obscure ?? true) : false,
         keyboardType: keyboardType,
+        style: TextStyle(color: colorScheme.onSurface),
         decoration: InputDecoration(
-          prefixIcon: Icon(prefixIcon, color: ColorsManager.darkGray),
+          prefixIcon: Icon(
+            prefixIcon,
+            color: colorScheme.onSurface.withOpacity(0.5),
+          ),
           suffixIcon: isPassword
               ? IconButton(
             icon: Icon(
               (obscure ?? true)
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: ColorsManager.darkGray,
+              color: colorScheme.onSurface.withOpacity(0.5),
             ),
             onPressed: onToggle,
           )
@@ -77,11 +86,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
           hintStyle: GoogleFonts.inter(
             fontWeight: FontWeight.w400,
             fontSize: 14,
-            color: ColorsManager.darkGray,
+            color: colorScheme.onSurface.withOpacity(0.5),
           ),
           filled: true,
-          fillColor: Colors.grey[200],
-          border: InputBorder.none,
+          fillColor: colorScheme.surface,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide.none,
+          ),
         ),
         validator: validator,
       ),
@@ -90,6 +110,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -109,9 +131,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 50),
+                      const SizedBox(height: 50),
 
                       _buildField(
+                        context,
                         controller: _usernameController,
                         hint: "Username",
                         prefixIcon: Icons.person_outline,
@@ -123,10 +146,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                      // Email
                       _buildField(
+                        context,
                         controller: _emailController,
                         hint: "Email",
                         prefixIcon: Icons.email_outlined,
@@ -142,10 +165,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                      // Password
                       _buildField(
+                        context,
                         controller: _passwordController,
                         hint: "Password",
                         prefixIcon: Icons.lock_outline,
@@ -167,9 +190,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       _buildField(
+                        context,
                         controller: _confirmController,
                         hint: "Confirm password",
                         prefixIcon: Icons.lock_outline,
@@ -197,7 +221,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         text: "Sign Up",
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            Navigator.pushNamed(context, RoutesManager.homeScreen);
+                            Navigator.pushNamed(
+                                context, RoutesManager.homeScreen);
                           }
                         },
                       ),
@@ -212,7 +237,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               "Already have an account? ",
                               style: GoogleFonts.inter(
                                 fontSize: 14,
-                                color: Colors.black87,
+                                color: colorScheme.onSurface,
                               ),
                             ),
                             GestureDetector(

@@ -25,12 +25,13 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: 320,
       decoration: BoxDecoration(
-        color: isDark ? ColorsManager.green : ColorsManager.col,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: isDark ? [] : [
           BoxShadow(
@@ -45,27 +46,27 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscureText,
         validator: validator,
         style: TextStyle(
-          color: isDark ? ColorsManager.green : ColorsManager.lightBlack,
+          color: colorScheme.onSurface,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
-            color: isDark ? ColorsManager.white : ColorsManager.darkGray,
+            color: colorScheme.onSurface.withOpacity(0.5),
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
           prefixIcon: prefixIcon != null
               ? Icon(
-                  prefixIcon,
-                  color: isDark ? ColorsManager.white : ColorsManager.darkGray,
-                  size: 20,
-                )
+            prefixIcon,
+            color: colorScheme.onSurface.withOpacity(0.5),
+            size: 20,
+          )
               : null,
           suffixIcon: suffixIcon,
           filled: true,
-          fillColor: isDark ? ColorsManager.lightBlack : ColorsManager.lightwhite,
+          fillColor: colorScheme.surface,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 16,
@@ -73,19 +74,22 @@ class CustomTextField extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
-              color: isDark ? ColorsManager.green : ColorsManager.white,
+              color: ColorsManager.green.withOpacity(0.5),
+              width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
-              color: isDark ? ColorsManager.darkGray : ColorsManager.col,
+              color: ColorsManager.green,
+              width: 1,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
-              color: isDark ? ColorsManager.green : ColorsManager.darkGray,
+              color: ColorsManager.green,
+              width: 1.5,
             ),
           ),
         ),
