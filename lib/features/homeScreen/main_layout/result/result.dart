@@ -9,14 +9,9 @@ import 'package:provider/provider.dart';
 import '../../../../core/widget/document_card.dart';
 import '../../../../core/widget/favorites_provider.dart';
 
-class Result extends StatefulWidget {
+class Result extends StatelessWidget {
   const Result({super.key});
 
-  @override
-  State<Result> createState() => _ResultState();
-}
-
-class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -70,6 +65,7 @@ class _ResultState extends State<Result> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 20),
                     Text(
                       l.mainTopic,
                       style: GoogleFonts.inter(

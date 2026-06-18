@@ -1,8 +1,10 @@
+import 'package:awn/core/API/api_consumer.dart';
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/custom_text_button.dart';
 import 'package:awn/core/widget/gradient_button.dart';
 import 'package:awn/core/widget/login_header.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/resources/colors_manager.dart';
@@ -16,12 +18,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  late final ApiConsumer api;
 
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
 
   @override
   void dispose() {

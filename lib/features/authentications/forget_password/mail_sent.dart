@@ -19,49 +19,51 @@ class MailSent extends StatelessWidget {
     final l = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Appbar(title: l.forgetPasswordTitle),
-
-          const SizedBox(height: 30),
-
-          SvgPicture.asset(AssetsManager.forgetpassword2),
-
-          const SizedBox(height: 50),
-
-          Text(
-            l.mailSentDesc,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.inter(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Appbar(title: l.forgetPasswordTitle),
+        
+            const SizedBox(height: 30),
+        
+            SvgPicture.asset(AssetsManager.forgetpassword2),
+        
+            const SizedBox(height: 50),
+        
+            Text(
+              l.mailSentDesc,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-
-          const SizedBox(height: 50),
-
-          OtpInputField(
-            onCompleted: (otp) {},
-          ),
-
-          const SizedBox(height: 60),
-
-          CustomTextButton(
-            text: l.resendCode,
-            onPressed: () {},
-          ),
-
-          const SizedBox(height: 50),
-
-          GradientButton(
-            width: 350,
-            text: l.verify,
-            onTap: () {
-              Navigator.pushNamed(context, RoutesManager.verifyPassword);
-            },
-          ),
-        ],
+        
+            const SizedBox(height: 50),
+        
+            OtpInputField(
+              onCompleted: (otp) {},
+            ),
+        
+            const SizedBox(height: 60),
+        
+            CustomTextButton(
+              text: l.resendCode,
+              onPressed: () {},
+            ),
+        
+            const SizedBox(height: 50),
+        
+            GradientButton(
+              width: 350,
+              text: l.verify,
+              onTap: () {
+                Navigator.pushNamed(context, RoutesManager.verifyPassword);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

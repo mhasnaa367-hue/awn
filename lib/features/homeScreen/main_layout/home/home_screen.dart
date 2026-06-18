@@ -47,7 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
-                    color: ColorsManager.green,
+                    color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : ColorsManager.green,
                   ),
                 ),
               ],
@@ -59,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: colorScheme.onSurface.withOpacity(0.5),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : ColorsManager.lightgray,
                   ),
                 ),
               ],
