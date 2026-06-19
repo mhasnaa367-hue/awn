@@ -1,6 +1,7 @@
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/resources/colors_manager.dart';
 import 'package:awn/core/widget/Appbar.dart';
+import 'package:awn/core/widget/gradient_button.dart';
 import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -171,6 +172,7 @@ class Result extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 32),
+                    // GradientButton(text: "Translate", onTap: (){})
                   ],
                 ),
               ),

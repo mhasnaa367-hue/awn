@@ -1,12 +1,28 @@
 import 'dart:io';
 
 import 'package:awn/core/API/api_consumer.dart';
+import 'package:awn/core/API/api_interceptor.dart';
 import 'package:awn/core/API/errors/error_model.dart';
 import 'package:awn/core/API/errors/exception.dart';
 import 'package:dio/dio.dart';
 
 class DioConsumer extends ApiConsumer {
   late final Dio dio;
+
+  DioConsumer({required this.dio}) {
+    dio.options.baseUrl = "odfmofmpomdomdfo";
+    dio.interceptors.add(ApiInterceptor());
+    dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestBody: true,
+        requestHeader: true,
+        responseBody: true,
+        responseHeader: true,
+        error: true,
+      ),
+    );
+  }
 
   @override
   Future<dynamic> delete(
@@ -23,15 +39,15 @@ class DioConsumer extends ApiConsumer {
       return response.data;
     } on DioException catch (e) {
       handleDioExceotion(e);
-      }
     }
+  }
 
   @override
   Future<dynamic> get(
-      String path, {
-        Object? data,
-        Map<String, dynamic>? querParameters,
-      }) async {
+    String path, {
+    Object? data,
+    Map<String, dynamic>? querParameters,
+  }) async {
     try {
       final response = await dio.delete(
         path,
@@ -46,10 +62,10 @@ class DioConsumer extends ApiConsumer {
 
   @override
   Future<dynamic> patch(
-      String path, {
-        Object? data,
-        Map<String, dynamic>? querParameters,
-      }) async {
+    String path, {
+    Object? data,
+    Map<String, dynamic>? querParameters,
+  }) async {
     try {
       final response = await dio.delete(
         path,
@@ -64,10 +80,10 @@ class DioConsumer extends ApiConsumer {
 
   @override
   Future<dynamic> post(
-      String path, {
-        Object? data,
-        Map<String, dynamic>? querParameters,
-      }) async {
+    String path, {
+    Object? data,
+    Map<String, dynamic>? querParameters,
+  }) async {
     try {
       final response = await dio.delete(
         path,
