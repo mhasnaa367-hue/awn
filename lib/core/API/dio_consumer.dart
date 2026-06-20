@@ -10,7 +10,7 @@ class DioConsumer extends ApiConsumer {
   late final Dio dio;
 
   DioConsumer({required this.dio}) {
-    dio.options.baseUrl = "odfmofmpomdomdfo";
+    dio.options.baseUrl = "https://awn-production-edb2.up.railway.app/";
     dio.interceptors.add(ApiInterceptor());
     dio.interceptors.add(
       LogInterceptor(

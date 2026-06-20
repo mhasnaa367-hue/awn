@@ -1,4 +1,6 @@
 import 'package:awn/core/API/api_consumer.dart';
+import 'package:awn/core/API/end_point.dart';
+import 'package:awn/core/API/errors/exception.dart';
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/custom_text_button.dart';
@@ -16,6 +18,30 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
+
+class SignInCubit extends Cubit<SignInState> {
+  SignInCubit(this.api) : super(SignInInitial());
+
+  final ApiConsumer api;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  Future<void> signIn() async {
+    emit(SignInLoading());
+    try {
+      final response = await api.post(
+        EndPoint.signIn,
+        data: {
+          ApiKey.email: emailController.text,
+          ApiKey.password: passwordController.text,
+        },
+      );
+      emit(SignInSuccess(response: response));
+    } on ServerException catch (e) {
+      emit(SignInFailure(errMessage: e.errModel.errorMessage));
+    }
+  }
+}
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   late final ApiConsumer api;
@@ -33,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {

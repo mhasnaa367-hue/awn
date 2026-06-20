@@ -172,7 +172,6 @@ class Result extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 32),
-                    // GradientButton(text: "Translate", onTap: (){})
                   ],
                 ),
               ),
