@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:awn/core/API/api_consumer.dart';
 import 'package:awn/core/API/api_interceptor.dart';
-import 'package:awn/core/API/errors/error_model.dart';
 import 'package:awn/core/API/errors/exception.dart';
 import 'package:dio/dio.dart';
 
@@ -49,7 +46,7 @@ class DioConsumer extends ApiConsumer {
     Map<String, dynamic>? querParameters,
   }) async {
     try {
-      final response = await dio.delete(
+      final response = await dio.get(
         path,
         data: data,
         queryParameters: querParameters,
@@ -67,7 +64,7 @@ class DioConsumer extends ApiConsumer {
     Map<String, dynamic>? querParameters,
   }) async {
     try {
-      final response = await dio.delete(
+      final response = await dio.patch(
         path,
         data: data,
         queryParameters: querParameters,
@@ -85,7 +82,7 @@ class DioConsumer extends ApiConsumer {
     Map<String, dynamic>? querParameters,
   }) async {
     try {
-      final response = await dio.delete(
+      final response = await dio.post(
         path,
         data: data,
         queryParameters: querParameters,

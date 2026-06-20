@@ -1,13 +1,16 @@
+// All the server addresses (paths) live here in one place.
 class EndPoint {
-  static String baseUrl = 'sfmpofd';
-  static String signIn = '/api/health';
+  // The main server address. The full URL becomes baseUrl + path.
+  static String baseUrl = 'https://awn-production-edb2.up.railway.app/';
+
+  static String login = '/api/auth/login';
+  static String register = '/api/auth/register';
 }
 
-class ApiKey{
-  static String status='status';
-  static String ErrorMassage='ErrorMassage';
-  static String email='email';
-  static String password='password';
-  static String token='token';
-  static String id='id';
+// The names of the JSON fields we send/read. Keeping them here avoids typos.
+class ApiKey {
+  static String name = 'name';
+  static String email = 'email';
+  static String password = 'password';
+  static String message = 'message'; // server uses "message" for errors
 }

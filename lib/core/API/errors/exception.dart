@@ -1,58 +1,26 @@
 import 'package:awn/core/API/errors/error_model.dart';
 import 'package:dio/dio.dart';
 
+// Our own simple error type. It carries a readable message.
 class ServerException implements Exception {
-  late final ErrorModel errModel;
+  final ErrorModel errModel;
 
   ServerException({required this.errModel});
 }
 
+// Turns any Dio error into a ServerException with a friendly message.
+// If the server sent a JSON body with a "message", we use it.
+// Otherwise (no internet, timeout, etc.) we use a generic message.
 void handleDioExceotion(DioException e) {
-  switch (e.type) {
-    case DioExceptionType.connectionTimeout:
-      throw ServerException(errModel: ErrorModel.fromjson(e.response!.data));
-    case DioExceptionType.sendTimeout:
-      throw ServerException(errModel: ErrorModel.fromjson(e.response!.data));
-    case DioExceptionType.receiveTimeout:
-      throw ServerException(errModel: ErrorModel.fromjson(e.response!.data));
-    case DioExceptionType.badCertificate:
-      throw ServerException(errModel: ErrorModel.fromjson(e.response!.data));
-    case DioExceptionType.cancel:
-      throw ServerException(errModel: ErrorModel.fromjson(e.response!.data));
-    case DioExceptionType.connectionError:
-      throw ServerException(errModel: ErrorModel.fromjson(e.response!.data));
-    case DioExceptionType.unknown:
-      throw ServerException(errModel: ErrorModel.fromjson(e.response!.data));
-    case DioExceptionType.badResponse:
-      switch (e.response?.statusCode) {
-        case 400:
-          throw ServerException(
-            errModel: ErrorModel.fromjson(e.response!.data),
-          );
-        case 401:
-          throw ServerException(
-            errModel: ErrorModel.fromjson(e.response!.data),
-          );
-        case 403:
-          throw ServerException(
-            errModel: ErrorModel.fromjson(e.response!.data),
-          );
-        case 404:
-          throw ServerException(
-            errModel: ErrorModel.fromjson(e.response!.data),
-          );
-        case 409:
-          throw ServerException(
-            errModel: ErrorModel.fromjson(e.response!.data),
-          );
-        case 422:
-          throw ServerException(
-            errModel: ErrorModel.fromjson(e.response!.data),
-          );
-        case 504:
-          throw ServerException(
-            errModel: ErrorModel.fromjson(e.response!.data),
-          );
-      }
+  final data = e.response?.data;
+
+  if (data is Map<String, dynamic>) {
+    throw ServerException(errModel: ErrorModel.fromjson(data));
   }
+
+  throw ServerException(
+    errModel: ErrorModel(
+      errorMessage: 'Network error, please check your connection and try again',
+    ),
+  );
 }

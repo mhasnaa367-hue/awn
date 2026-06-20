@@ -1,16 +1,13 @@
-import 'package:awn/core/API/api_consumer.dart';
-import 'package:awn/core/API/end_point.dart';
+import 'package:awn/core/API/auth_setup.dart';
+import 'package:awn/core/API/domain/repositories/auth_repository.dart';
 import 'package:awn/core/API/errors/exception.dart';
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/custom_text_button.dart';
 import 'package:awn/core/widget/gradient_button.dart';
 import 'package:awn/core/widget/login_header.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/API/sign_in_state.dart';
 import '../../../core/resources/colors_manager.dart';
 import 'package:awn/l10n/app_localizations.dart';
 class LoginScreen extends StatefulWidget {
@@ -20,40 +17,46 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-
-class SignInCubit extends Cubit<SignInState> {
-  SignInCubit(this.api) : super(SignInInitial());
-
-  final ApiConsumer api;
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  Future<void> signIn() async {
-    emit(SignInLoading());
-    try {
-      final response = await api.post(
-        EndPoint.signIn,
-        data: {
-          ApiKey.email: emailController.text,
-          ApiKey.password: passwordController.text,
-        },
-      );
-      emit(SignInSuccess(response: response));
-    } on ServerException catch (e) {
-      emit(SignInFailure(errMessage: e.errModel.errorMessage));
-    }
-  }
-}
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  late final ApiConsumer api;
+
+  // Our ready-to-use auth repository (built by the helper).
+  final AuthRepository _auth = createAuthRepository();
 
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  bool _isLoading = false; // true while we wait for the server
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // Sends the login request and reacts to the result.
+  Future<void> _login() async {
+    // 1) Check the form first.
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+    try {
+      // 2) Call the API.
+      await _auth.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      if (!mounted) return;
+      // 3) Success -> go to the home screen.
+      Navigator.pushNamed(context, RoutesManager.homeScreen);
+    } on ServerException catch (e) {
+      // 4) The server said no (wrong password, etc.) -> show the message.
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.errModel.errorMessage)),
+      );
+    } finally {
+      // 5) Always stop the loading spinner.
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   void dispose() {
@@ -267,14 +270,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       const SizedBox(height: 16),
 
-                      GradientButton(
-                        text: l.signIn,
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushNamed(context, RoutesManager.homeScreen);
-                          }
-                        },
-                      ),
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : GradientButton(
+                              text: l.signIn,
+                              onTap: _login,
+                            ),
 
                       const SizedBox(height: 24),
 

@@ -1,3 +1,6 @@
+import 'package:awn/core/API/auth_setup.dart';
+import 'package:awn/core/API/domain/repositories/auth_repository.dart';
+import 'package:awn/core/API/errors/exception.dart';
 import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/widget/login_header.dart';
 import 'package:awn/core/widget/gradient_button.dart';
@@ -18,13 +21,46 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  // Our ready-to-use auth repository (built by the helper).
+  final AuthRepository _auth = createAuthRepository();
+
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
+  bool _isLoading = false; // true while we wait for the server
 
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
+
+  // Sends the register request and reacts to the result.
+  Future<void> _register() async {
+    // 1) Check the form first.
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+    try {
+      // 2) Call the API. The server expects: name, email, password.
+      await _auth.register(
+        name: _usernameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      if (!mounted) return;
+      // 3) Success -> go to the home screen.
+      Navigator.pushNamed(context, RoutesManager.homeScreen);
+    } on ServerException catch (e) {
+      // 4) The server said no (email taken, weak password, etc.).
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.errModel.errorMessage)),
+      );
+    } finally {
+      // 5) Always stop the loading spinner.
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   void dispose() {
@@ -219,15 +255,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       const SizedBox(height: 30),
 
-                      GradientButton(
-                        text: l.register,
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushNamed(
-                                context, RoutesManager.homeScreen);
-                          }
-                        },
-                      ),
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : GradientButton(
+                              text: l.register,
+                              onTap: _register,
+                            ),
 
                       const SizedBox(height: 20),
 

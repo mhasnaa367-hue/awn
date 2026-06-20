@@ -1,15 +1,16 @@
-import 'package:awn/core/API/end_point.dart';
+// Holds the error message the server sends back.
+// The server returns errors like: { "success": false, "message": "..." }
+import '../end_point.dart';
 
 class ErrorModel {
-  late final int status;
-  late final String errorMessage;
+  final String errorMessage;
 
-  ErrorModel({required this.errorMessage, required this.status});
+  ErrorModel({required this.errorMessage});
 
   factory ErrorModel.fromjson(Map<String, dynamic> jsonData) {
     return ErrorModel(
-      errorMessage: jsonData[ApiKey.ErrorMassage],
-      status: jsonData[ApiKey.status],
+      errorMessage:
+          jsonData[ApiKey.message]?.toString() ?? 'Something went wrong',
     );
   }
 }
