@@ -46,6 +46,8 @@ dependencies:
   provider: ^6.1.2
   image_picker: ^1.1.2
   http: ^1.2.0
+  bloc_presentation: ^1.1.2+3
+  flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
   dio: ^5.9.2

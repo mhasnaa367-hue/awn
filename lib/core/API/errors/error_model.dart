@@ -2,13 +2,13 @@ import 'package:awn/core/API/end_point.dart';
 
 class ErrorModel {
   late final int status;
-  late final int errorMassage;
+  late final String errorMessage;
 
-  ErrorModel({required this.errorMassage, required this.status});
+  ErrorModel({required this.errorMessage, required this.status});
 
   factory ErrorModel.fromjson(Map<String, dynamic> jsonData) {
     return ErrorModel(
-      errorMassage: jsonData[ApiKey.ErrorMassage],
+      errorMessage: jsonData[ApiKey.ErrorMassage],
       status: jsonData[ApiKey.status],
     );
   }
