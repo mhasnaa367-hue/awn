@@ -16,6 +16,8 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<void> forgotPassword({required String email}) async {}
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -31,10 +33,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     final response = await api.post(
       EndPoint.login,
-      data: {
-        ApiKey.email: email,
-        ApiKey.password: password,
-      },
+      data: {ApiKey.email: email, ApiKey.password: password},
     );
     return AuthResultModel.fromJson(response);
   }
@@ -48,12 +47,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     final response = await api.post(
       EndPoint.register,
-      data: {
-        ApiKey.name: name,
-        ApiKey.email: email,
-        ApiKey.password: password,
-      },
+      data: {ApiKey.name: name, ApiKey.email: email, ApiKey.password: password},
     );
     return AuthResultModel.fromJson(response);
+  }
+
+  @override
+  @override
+  Future<void> forgotPassword({required String email}) async {
+    await api.post(EndPoint.forgotPassword, data: {ApiKey.email: email});
   }
 }

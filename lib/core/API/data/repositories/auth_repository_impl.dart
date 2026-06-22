@@ -1,10 +1,6 @@
-// DATA LAYER
-// This is the REAL implementation of the AuthRepository contract.
-// It simply asks the remote data source to do the network work.
-// (In a bigger app this is also where you'd save the tokens, etc.)
-import 'package:awn/core/API/domain/entities/auth_result.dart';
-import 'package:awn/core/API/domain/repositories/auth_repository.dart';
-import 'package:awn/core/API/data/datasources/auth_remote_data_source.dart';
+import '../../domain/entities/auth_result.dart';
+import '../../domain/repositories/auth_repository.dart';
+import '../datasources/auth_remote_data_source.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -16,7 +12,10 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) {
-    return remoteDataSource.login(email: email, password: password);
+    return remoteDataSource.login(
+      email: email,
+      password: password,
+    );
   }
 
   @override
@@ -30,5 +29,12 @@ class AuthRepositoryImpl implements AuthRepository {
       email: email,
       password: password,
     );
+  }
+
+  @override
+  Future<void> forgotPassword({
+    required String email,
+  }) async {
+    await remoteDataSource.forgotPassword(email: email);
   }
 }

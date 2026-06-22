@@ -5,6 +5,8 @@ class EndPoint {
 
   static String login = '/api/auth/login';
   static String register = '/api/auth/register';
+
+  static String forgotPassword = '/api/auth/verify-email';
 }
 
 // The names of the JSON fields we send/read. Keeping them here avoids typos.
