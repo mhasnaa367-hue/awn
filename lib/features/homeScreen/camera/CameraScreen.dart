@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:awn/core/API/document_setup.dart';
+import 'package:awn/core/API/domain/repositories/document_repository.dart';
+import 'package:awn/core/API/errors/exception.dart';
 import 'package:awn/core/routesManager.dart';
+import 'package:awn/core/widget/app_snack_bar.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +19,11 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraController? _controller;
   bool _isLoading = true;
   XFile? _capturedImage;
+
+  // Our ready-to-use document repository (built by the helper).
+  final DocumentRepository _documents = createDocumentRepository();
+
+  bool _isUploading = false; // true while we send the photo to the server
 
   @override
   void initState() {
@@ -65,10 +74,39 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  void _confirmPicture() {
+  // Send the captured photo to the server, then react to the result.
+  Future<void> _confirmPicture() async {
     if (_capturedImage == null) return;
 
-    Navigator.pushNamed(context, RoutesManager.result);
+    setState(() => _isUploading = true);
+    try {
+      // 1) Call the upload API with the photo we just took.
+      final result =
+          await _documents.uploadDocument(filePath: _capturedImage!.path);
+
+      // 2) Success -> print the message in the terminal...
+      print('✅ Upload success: ${result.message}');
+      print('   document id: ${result.id}, status: ${result.status}');
+
+      if (!mounted) return;
+      // 3) ...show the same message on the screen with our core widget...
+      AppSnackBar.show(context, result.message, isSuccess: true);
+      // 4) ...then REPLACE the camera with the result screen, so pressing back
+      //    from the result returns to Home instead of the live camera.
+      Navigator.pushReplacementNamed(
+        context,
+        RoutesManager.result,
+        arguments: result.id,
+      );
+    } on ServerException catch (e) {
+      // 5) The server said no -> show the message.
+      print('❌ Upload failed: ${e.errModel.errorMessage}');
+      if (!mounted) return;
+      AppSnackBar.show(context, e.errModel.errorMessage, isSuccess: false);
+    } finally {
+      // 6) Always stop the loading spinner.
+      if (mounted) setState(() => _isUploading = false);
+    }
   }
 
   @override
@@ -135,6 +173,12 @@ class _CameraScreenState extends State<CameraScreen> {
               ),
             ),
           ),
+          // A simple loading overlay while the photo is being uploaded.
+          if (_isUploading)
+            Container(
+              color: Colors.black.withOpacity(0.4),
+              child: const Center(child: CircularProgressIndicator()),
+            ),
         ],
       )
           : Stack(

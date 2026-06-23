@@ -1,6 +1,11 @@
+import 'package:awn/core/API/auth_setup.dart';
+import 'package:awn/core/API/domain/repositories/auth_repository.dart';
+import 'package:awn/core/providers/user_provider.dart';
 import 'package:awn/core/routesManager.dart';
+import 'package:awn/core/widget/user_avatar.dart';
 import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../resources/colors_manager.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -12,6 +17,30 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   String _activeItem = 'Home';
+  final AuthRepository _auth = createAuthRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    // Uses the cached user — only hits the network the first time, so opening
+    // the drawer again and again does NOT re-fetch.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => context.read<UserProvider>().ensureLoaded(),
+    );
+  }
+
+  Future<void> _logout() async {
+    try {
+      await _auth.logout();
+    } catch (_) {
+      // Local session is cleared regardless of the network result.
+    }
+    if (!mounted) return;
+    await context.read<UserProvider>().clear();
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(
+        context, RoutesManager.loginsrceen, (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,35 +59,38 @@ class _AppDrawerState extends State<AppDrawer> {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      l.hiEman,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Builder(builder: (context) {
+                        final name = context.watch<UserProvider>().name;
+                        return Text(
+                          name.isEmpty ? l.hiEman : l.greeting(name),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }),
+                      const SizedBox(height: 6),
+                      Text(
+                        l.learnSmarter,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      l.learnSmarter,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 13,
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-                const CircleAvatar(
-                  radius: 28,
-                  backgroundImage: NetworkImage(
-                    'https://i.pravatar.cc/100?img=11',
+                    ],
                   ),
                 ),
+                const SizedBox(width: 8),
+                const UserAvatar(radius: 28),
               ],
             ),
           ),
@@ -72,12 +104,7 @@ class _AppDrawerState extends State<AppDrawer> {
           Divider(color: colorScheme.outline.withOpacity(0.3)),
 
           TextButton(
-            onPressed: () {
-              Navigator.pushReplacementNamed(
-                context,
-                RoutesManager.loginsrceen,
-              );
-            },
+            onPressed: _logout,
             child: Text(
               l.logOutUpper,
               style: const TextStyle(

@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import '../features/authentications/forget_password/mail_sent.dart';
 import '../features/authentications/login/login_screen.dart';
 import '../features/authentications/register/register_screen.dart';
+import '../features/authentications/verify_email/verify_email_screen.dart';
 import '../features/splash/splash_screen.dart';
 
 class RoutesManager {
@@ -28,6 +29,7 @@ class RoutesManager {
   static const String profile = "/profile";
   static const String camera = "/camera_screen";
   static const String result = "/result";
+  static const String verifyEmail = "/verify_email";
 
   static Route? getRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -81,8 +83,19 @@ class RoutesManager {
         }
         case result:
         {
-          return CupertinoPageRoute(builder: (context) => Result());
+          // The id of the document to show is passed as the route argument.
+          final documentId = settings.arguments is String
+              ? settings.arguments as String
+              : null;
+          return CupertinoPageRoute(
+            builder: (context) => Result(documentId: documentId),
+          );
+        }
+        case verifyEmail:
+        {
+          return CupertinoPageRoute(builder: (context) => const VerifyEmailScreen());
         }
     }
+    return null;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../resources/colors_manager.dart';
+import '../utils/responsive.dart';
 
 class LoginHeader extends StatelessWidget {
   final String title;
@@ -10,10 +11,14 @@ class LoginHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Height adapts to the screen but is clamped so it never dominates a small
+    // phone or look lost on a big tablet.
+    final height = context.hp(36).clamp(240.0, 340.0);
+
     return ClipPath(
       clipper: BottomWaveClipper(),
       child: Container(
-        height: 300,
+        height: height,
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -23,7 +28,7 @@ class LoginHeader extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.only(left: 25, top: 60),
+          padding: EdgeInsets.only(left: context.wp(7), top: context.hp(7)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -31,16 +36,16 @@ class LoginHeader extends StatelessWidget {
                 title,
                 style: GoogleFonts.inter(
                   color: ColorsManager.white,
-                  fontSize: 32,
+                  fontSize: context.sp(32),
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: context.hp(1.2)),
               Text(
                 text,
                 style: GoogleFonts.inter(
                   color: ColorsManager.white,
-                  fontSize: 16,
+                  fontSize: context.sp(16),
                   fontWeight: FontWeight.w400,
                 ),
               )

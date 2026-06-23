@@ -1,5 +1,6 @@
 import 'package:awn/core/resources/assets_manager.dart';
 import 'package:awn/core/resources/colors_manager.dart';
+import 'package:awn/core/utils/responsive.dart';
 import 'package:awn/features/authentications/login/login_screen.dart';
 import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
 
           Positioned(
-            bottom: 80,
+            bottom: context.hp(10),
             left: 0,
             right: 0,
             child: Center(
@@ -86,9 +87,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
 
           Positioned(
-            bottom: 190,
-            right: 20,
-            left: isLastPage ? 20 : null,
+            bottom: context.hp(23),
+            right: context.wp(5),
+            left: isLastPage ? context.wp(5) : null,
             child: GestureDetector(
               onTap: () {
                 if (isLastPage) {
@@ -102,8 +103,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                height: 50,
-                width: 120,
+                height: context.r(50),
+                width: isLastPage ? double.infinity : context.wp(32),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -113,9 +114,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 child: Text(
                   isLastPage ? l.getStarted : l.next,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: context.sp(20),
                     fontWeight: FontWeight.w500,
                   ),
                 ),

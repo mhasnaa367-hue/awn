@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../resources/colors_manager.dart';
+import '../utils/responsive.dart';
 
 class GradientButton extends StatelessWidget {
   final String text;
@@ -19,8 +20,11 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? double.infinity,
-      height: height,
+      // Cap the width so fixed values passed on small screens never overflow.
+      width: width == null
+          ? double.infinity
+          : width!.clamp(0.0, context.screenWidth - context.wp(8)),
+      height: context.r(height).clamp(48.0, 64.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -48,7 +52,7 @@ class GradientButton extends StatelessWidget {
             child: Text(
               text,
               style: GoogleFonts.inter(
-                fontSize: 18,
+                fontSize: context.sp(18),
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),

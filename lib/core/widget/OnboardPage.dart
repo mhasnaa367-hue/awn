@@ -1,4 +1,5 @@
 import 'package:awn/core/resources/colors_manager.dart';
+import 'package:awn/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,14 +35,14 @@ class OnboardPage extends StatelessWidget {
           child: Stack(
             children: [
               Positioned(
-                top: 50,
-                right: 25,
+                top: context.hp(6),
+                right: context.wp(6),
                 child: InkWell(
                   onTap: onSkip,
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 8),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.wp(4.5), vertical: context.hp(1)),
                     decoration: BoxDecoration(
                       color: ColorsManager.white,
                       borderRadius: BorderRadius.circular(20),
@@ -51,7 +52,7 @@ class OnboardPage extends StatelessWidget {
                       style: GoogleFonts.inter(
                         color: ColorsManager.green,
                         fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontSize: context.sp(16),
                       ),
                     ),
                   ),
@@ -59,12 +60,14 @@ class OnboardPage extends StatelessWidget {
               ),
               Center(
                 child: Padding(
-                  padding:
-                  const EdgeInsets.only(top: 40, left: 20, right: 20),
+                  padding: EdgeInsets.only(
+                      top: context.hp(5),
+                      left: context.wp(5),
+                      right: context.wp(5)),
                   child: SvgPicture.asset(
                     image,
-                    height: 260,
-                    width: 260,
+                    height: context.wp(60).clamp(180.0, 320.0),
+                    width: context.wp(60).clamp(180.0, 320.0),
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -75,26 +78,26 @@ class OnboardPage extends StatelessWidget {
 
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 50),
+                SizedBox(height: context.hp(6)),
                 Text(
                   title,
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
-                    fontSize: 24,
+                    fontSize: context.sp(24),
                     color: ColorsManager.green,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: context.hp(2.5)),
                 Text(
                   description,
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w400,
-                    fontSize: 18,
+                    fontSize: context.sp(18),
                     color: ColorsManager.lightgray,
                     height: 1.4,
                   ),

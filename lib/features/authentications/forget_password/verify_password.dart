@@ -1,4 +1,5 @@
 import 'package:awn/core/routesManager.dart';
+import 'package:awn/core/utils/responsive.dart';
 import 'package:awn/core/widget/Appbar.dart';
 import 'package:awn/core/widget/custom_text_field.dart';
 import 'package:awn/core/widget/gradient_button.dart';
@@ -36,33 +37,39 @@ class _VerifyPasswordState extends State<VerifyPassword> {
     final l = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Appbar(title: l.forgetPasswordTitle),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: ResponsiveCenter(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Appbar(title: l.forgetPasswordTitle),
 
-              SvgPicture.asset(AssetsManager.forgetpassword3),
+                  SvgPicture.asset(AssetsManager.forgetpassword3,
+                      width: context.wp(70)),
 
-              const SizedBox(height: 50),
+                  SizedBox(height: context.hp(5)),
 
-              Text(
-                l.verifyPasswordDesc,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.inter(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
+                    child: Text(
+                      l.verifyPasswordDesc,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: context.sp(16),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
 
-              const SizedBox(height: 50),
+                  SizedBox(height: context.hp(5)),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: CustomTextField(
-                  hintText: l.newPassword,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
+                    child: CustomTextField(
+                      hintText: l.newPassword,
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   prefixIcon: Icons.lock_outline_rounded,
@@ -91,52 +98,58 @@ class _VerifyPasswordState extends State<VerifyPassword> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+                  SizedBox(height: context.hp(2.5)),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: CustomTextField(
-                  hintText: l.confirmPassword,
-                  controller: _confirmController,
-                  obscureText: _obscureConfirm,
-                  prefixIcon: Icons.lock_outline_rounded,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l.enterNewPassword;
-                    }
-                    if (value != _passwordController.text) {
-                      return l.passwordMatch;
-                    }
-                    return null;
-                  },
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureConfirm
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: ColorsManager.darkGray,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
+                    child: CustomTextField(
+                      hintText: l.confirmPassword,
+                      controller: _confirmController,
+                      obscureText: _obscureConfirm,
+                      prefixIcon: Icons.lock_outline_rounded,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l.enterNewPassword;
+                        }
+                        if (value != _passwordController.text) {
+                          return l.passwordMatch;
+                        }
+                        return null;
+                      },
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirm
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: ColorsManager.darkGray,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureConfirm = !_obscureConfirm;
+                          });
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureConfirm = !_obscureConfirm;
-                      });
-                    },
                   ),
-                ),
-              ),
 
-              const SizedBox(height: 50),
+                  SizedBox(height: context.hp(6)),
 
-              GradientButton(
-                width: 320,
-                text: l.save,
-                onTap: () {
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.pushNamed(context, RoutesManager.homeScreen);
-                  }
-                },
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
+                    child: GradientButton(
+                      text: l.save,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.pushNamed(context, RoutesManager.homeScreen);
+                        }
+                      },
+                    ),
+                  ),
+
+                  SizedBox(height: context.hp(2.5)),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

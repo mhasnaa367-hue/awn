@@ -1,11 +1,17 @@
+import 'package:awn/core/API/auth_setup.dart';
+import 'package:awn/core/API/domain/repositories/auth_repository.dart';
+import 'package:awn/core/API/errors/exception.dart';
 import 'package:awn/core/language_provider.dart';
+import 'package:awn/core/providers/user_provider.dart';
 import 'package:awn/core/routesManager.dart';
+import 'package:awn/core/utils/responsive.dart';
+import 'package:awn/core/widget/app_snack_bar.dart';
+import 'package:awn/core/widget/user_avatar.dart';
 import 'package:awn/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/resources/assets_manager.dart';
 import '../../../../core/resources/colors_manager.dart';
 import '../../../../core/widget/Appbar.dart';
 import 'package:awn/config/theme/theme.dart';
@@ -18,20 +24,65 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String _name = "Eman Hesham";
-  String _email = "eh123@gmail.com";
-  bool _isDark = false;
+  final AuthRepository _auth = createAuthRepository();
+  final ImagePicker _picker = ImagePicker();
 
-  void _editField(String label, String currentValue, Function(String) onSave) {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => context.read<UserProvider>().ensureLoaded(),
+    );
+  }
+
+  // Let the user pick a profile picture from the camera or gallery.
+  Future<void> _pickAvatar() async {
     final l = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: currentValue);
-    showDialog(
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt_outlined),
+              title: Text(l.scanPage),
+              onTap: () => Navigator.pop(context, ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l.uploadFile),
+              onTap: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null) return;
+
+    try {
+      final picked = await _picker.pickImage(source: source, imageQuality: 80);
+      if (picked == null || !mounted) return;
+      await context.read<UserProvider>().setLocalAvatar(picked.path);
+      if (!mounted) return;
+      AppSnackBar.show(context, l.profileUpdated, isSuccess: true);
+    } catch (e) {
+      if (!mounted) return;
+      AppSnackBar.show(context, l.loadFailed, isSuccess: false);
+    }
+  }
+
+  Future<void> _editName() async {
+    final l = AppLocalizations.of(context)!;
+    final users = context.read<UserProvider>();
+    final controller = TextEditingController(text: users.name);
+    final newName = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("${l.edit} $label"),
+        title: Text("${l.edit} ${l.editName}"),
         content: TextField(
           controller: controller,
-          decoration: InputDecoration(hintText: label),
+          decoration: InputDecoration(hintText: l.editName),
         ),
         actions: [
           TextButton(
@@ -39,15 +90,103 @@ class _ProfileState extends State<Profile> {
             child: Text(l.cancel),
           ),
           TextButton(
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
+            child: Text(l.save),
+          ),
+        ],
+      ),
+    );
+
+    if (newName == null || newName.isEmpty || newName == users.name) return;
+    try {
+      await users.updateName(newName);
+      if (!mounted) return;
+      AppSnackBar.show(context, l.profileUpdated, isSuccess: true);
+    } on ServerException catch (e) {
+      if (!mounted) return;
+      AppSnackBar.show(context, e.errModel.errorMessage, isSuccess: false);
+    }
+  }
+
+  Future<void> _changePassword() async {
+    final l = AppLocalizations.of(context)!;
+    final currentCtrl = TextEditingController();
+    final newCtrl = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(l.changePassword),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: currentCtrl,
+                obscureText: true,
+                decoration: InputDecoration(hintText: l.currentPassword),
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l.enterPassword : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: newCtrl,
+                obscureText: true,
+                decoration: InputDecoration(hintText: l.newPassword),
+                validator: (v) =>
+                    (v == null || v.length < 8) ? l.passwordMin8 : null,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.cancel),
+          ),
+          TextButton(
             onPressed: () {
-              onSave(controller.text);
-              Navigator.pop(context);
+              if (formKey.currentState!.validate()) {
+                Navigator.pop(context, true);
+              }
             },
             child: Text(l.save),
           ),
         ],
       ),
     );
+
+    if (ok != true) return;
+    try {
+      await _auth.changePassword(
+        currentPassword: currentCtrl.text,
+        newPassword: newCtrl.text,
+      );
+      if (!mounted) return;
+      await context.read<UserProvider>().clear();
+      if (!mounted) return;
+      AppSnackBar.show(context, l.passwordChanged, isSuccess: true);
+      Navigator.pushNamedAndRemoveUntil(
+          context, RoutesManager.loginsrceen, (route) => false);
+    } on ServerException catch (e) {
+      if (!mounted) return;
+      AppSnackBar.show(context, e.errModel.errorMessage, isSuccess: false);
+    }
+  }
+
+  Future<void> _logout() async {
+    try {
+      await _auth.logout();
+    } catch (_) {
+      // Local session is cleared regardless of the network result.
+    }
+    if (!mounted) return;
+    await context.read<UserProvider>().clear();
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(
+        context, RoutesManager.loginsrceen, (route) => false);
   }
 
   void _showLanguageDialog(BuildContext context) {
@@ -85,113 +224,151 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l = AppLocalizations.of(context)!;
+    final users = context.watch<UserProvider>();
 
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Appbar(title: l.profile),
-          const SizedBox(height: 60),
-          SvgPicture.asset(AssetsManager.prof, width: 120),
-          const SizedBox(height: 16),
-
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _name,
-                style: GoogleFonts.inter(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.onSurface,
-                ),
-              ),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: () => _editField(l.editName, _name, (val) {
-                  setState(() => _name = val);
-                }),
-                child: Icon(
-                  Icons.edit,
-                  size: 18,
-                  color: colorScheme.onSurface.withOpacity(0.5),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _email,
-                style: GoogleFonts.inter(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: colorScheme.onSurface.withOpacity(0.5),
-                ),
-              ),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: () => _editField(l.editEmail, _email, (val) {
-                  setState(() => _email = val);
-                }),
-                child: Icon(
-                  Icons.edit,
-                  size: 16,
-                  color: colorScheme.onSurface.withOpacity(0.5),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 40),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                _OptionCard(
-                  icon: Icons.language,
-                  label: l.language,
-                  trailing: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: colorScheme.onSurface.withOpacity(0.5),
+      body: SafeArea(
+        child: (!users.isLoaded && users.isLoading)
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: ResponsiveCenter(
+                  maxWidth: 560,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Appbar(title: l.profile),
+                      SizedBox(height: context.hp(4)),
+                      UserAvatar(
+                        radius: context.r(56),
+                        showCameraBadge: true,
+                        onTap: _pickAvatar,
+                      ),
+                      SizedBox(height: context.hp(2)),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              users.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontSize: context.sp(18),
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: _editName,
+                            child: Icon(
+                              Icons.edit,
+                              size: context.r(18),
+                              color: colorScheme.onSurface.withOpacity(0.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: context.hp(0.5)),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              users.email,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontSize: context.sp(14),
+                                fontWeight: FontWeight.w400,
+                                color: colorScheme.onSurface.withOpacity(0.5),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Icon(
+                            users.isVerified
+                                ? Icons.verified
+                                : Icons.error_outline,
+                            size: context.r(16),
+                            color: users.isVerified
+                                ? ColorsManager.green
+                                : ColorsManager.red,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: context.hp(4)),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: context.wp(5)),
+                        child: Column(
+                          children: [
+                            if (!users.isVerified)
+                              _OptionCard(
+                                icon: Icons.mark_email_read_outlined,
+                                iconColor: ColorsManager.green,
+                                label: l.verifyEmailTitle,
+                                trailing: Icon(
+                                  Icons.chevron_right,
+                                  color: colorScheme.onSurface.withOpacity(0.5),
+                                ),
+                                onTap: () => Navigator.pushNamed(
+                                    context, RoutesManager.verifyEmail),
+                              ),
+                            if (!users.isVerified)
+                              SizedBox(height: context.hp(1.5)),
+                            _OptionCard(
+                              icon: Icons.lock_outline,
+                              label: l.changePassword,
+                              trailing: Icon(
+                                Icons.chevron_right,
+                                color: colorScheme.onSurface.withOpacity(0.5),
+                              ),
+                              onTap: _changePassword,
+                            ),
+                            SizedBox(height: context.hp(1.5)),
+                            _OptionCard(
+                              icon: Icons.language,
+                              label: l.language,
+                              trailing: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: colorScheme.onSurface.withOpacity(0.5),
+                              ),
+                              onTap: () => _showLanguageDialog(context),
+                            ),
+                            SizedBox(height: context.hp(1.5)),
+                            _OptionCard(
+                              icon: Icons.dark_mode_outlined,
+                              label: l.dark,
+                              trailing: Consumer<ThemeProvider>(
+                                builder: (context, themeProvider, _) {
+                                  return Switch(
+                                    value: themeProvider.isDark,
+                                    onChanged: (val) =>
+                                        themeProvider.toggleTheme(),
+                                    activeColor: ColorsManager.green,
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(height: context.hp(1.5)),
+                            _OptionCard(
+                              icon: Icons.logout,
+                              iconColor: Colors.red,
+                              label: l.logOut,
+                              trailing: Icon(
+                                Icons.chevron_right,
+                                color: colorScheme.onSurface.withOpacity(0.5),
+                              ),
+                              onTap: _logout,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: context.hp(3)),
+                    ],
                   ),
-                  onTap: () => _showLanguageDialog(context),
                 ),
-                const SizedBox(height: 12),
-                _OptionCard(
-                  icon: Icons.dark_mode_outlined,
-                  label: l.dark,
-                  trailing: Consumer<ThemeProvider>(
-                    builder: (context, themeProvider, _) {
-                      return Switch(
-                        value: themeProvider.isDark,
-                        onChanged: (val) => themeProvider.toggleTheme(),
-                        activeColor: ColorsManager.green,
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _OptionCard(
-                  icon: Icons.logout,
-                  iconColor: Colors.red,
-                  label: l.logOut,
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: colorScheme.onSurface.withOpacity(0.5),
-                  ),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, RoutesManager.loginsrceen);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
+              ),
       ),
     );
   }
@@ -220,20 +397,21 @@ class _OptionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: EdgeInsets.symmetric(
+            horizontal: context.wp(4), vertical: context.hp(1.8)),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF2A2A2A) : colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
           children: [
-            Icon(icon, color: iconColor, size: 22),
-            const SizedBox(width: 12),
+            Icon(icon, color: iconColor, size: context.r(22)),
+            SizedBox(width: context.wp(3)),
             Expanded(
               child: Text(
                 label,
                 style: GoogleFonts.inter(
-                  fontSize: 15,
+                  fontSize: context.sp(15),
                   fontWeight: FontWeight.w500,
                   color: colorScheme.onSurface,
                 ),

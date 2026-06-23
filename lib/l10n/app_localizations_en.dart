@@ -233,4 +233,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logOutUpper => 'LOG OUT';
+
+  @override
+  String get verifyEmailTitle => 'Verify Email';
+
+  @override
+  String get verifyEmailDesc =>
+      'Please enter the 6 digit code\nsent to your email';
+
+  @override
+  String get emailVerified => 'Email verified successfully';
+
+  @override
+  String get otpResent => 'A new code has been sent';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get passwordChanged => 'Password changed. Please log in again.';
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String get save_changes => 'Save';
+
+  @override
+  String get noDocuments => 'No documents yet';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deleteDocumentConfirm => 'Delete this document?';
+
+  @override
+  String get documentDeleted => 'Document deleted';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get processingTitle => 'Processing…';
+
+  @override
+  String get processingDesc =>
+      'Your document is being processed.\nThis may take a moment.';
+
+  @override
+  String get failedTitle => 'Processing failed';
+
+  @override
+  String get refreshVideos => 'Refresh videos';
+
+  @override
+  String get noVideos => 'No videos found for this topic yet';
+
+  @override
+  String get noSummary => 'No summary available yet';
+
+  @override
+  String get loadFailed => 'Could not load. Please try again.';
+
+  @override
+  String greeting(String name) {
+    return 'Hi, $name 👋';
+  }
 }

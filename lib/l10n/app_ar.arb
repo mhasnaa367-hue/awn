@@ -72,5 +72,32 @@
   "favoritesList": "المفضلة",
   "historyList": "السجل",
   "profileLabel": "الملف الشخصي",
-  "logOutUpper": "تسجيل الخروج"
+  "logOutUpper": "تسجيل الخروج",
+  "verifyEmailTitle": "تأكيد البريد الإلكتروني",
+  "verifyEmailDesc": "من فضلك أدخل الكود المكون من 6 أرقام\nالمرسل إلى بريدك الإلكتروني",
+  "emailVerified": "تم تأكيد البريد الإلكتروني بنجاح",
+  "otpResent": "تم إرسال كود جديد",
+  "changePassword": "تغيير كلمة المرور",
+  "currentPassword": "كلمة المرور الحالية",
+  "passwordChanged": "تم تغيير كلمة المرور. من فضلك سجل الدخول مرة أخرى.",
+  "profileUpdated": "تم تحديث الملف الشخصي",
+  "save_changes": "حفظ",
+  "noDocuments": "لا توجد مستندات بعد",
+  "delete": "حذف",
+  "deleteDocumentConfirm": "حذف هذا المستند؟",
+  "documentDeleted": "تم حذف المستند",
+  "retry": "إعادة المحاولة",
+  "processingTitle": "جاري المعالجة…",
+  "processingDesc": "جاري معالجة المستند الخاص بك.\nقد يستغرق ذلك لحظة.",
+  "failedTitle": "فشلت المعالجة",
+  "refreshVideos": "تحديث الفيديوهات",
+  "noVideos": "لا توجد فيديوهات لهذا الموضوع بعد",
+  "noSummary": "لا يوجد ملخص متاح بعد",
+  "loadFailed": "تعذر التحميل. من فضلك حاول مرة أخرى.",
+  "greeting": "مرحباً، {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  }
 }

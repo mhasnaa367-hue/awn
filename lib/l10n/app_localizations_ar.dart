@@ -231,4 +231,75 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get logOutUpper => 'تسجيل الخروج';
+
+  @override
+  String get verifyEmailTitle => 'تأكيد البريد الإلكتروني';
+
+  @override
+  String get verifyEmailDesc =>
+      'من فضلك أدخل الكود المكون من 6 أرقام\nالمرسل إلى بريدك الإلكتروني';
+
+  @override
+  String get emailVerified => 'تم تأكيد البريد الإلكتروني بنجاح';
+
+  @override
+  String get otpResent => 'تم إرسال كود جديد';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get currentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get passwordChanged =>
+      'تم تغيير كلمة المرور. من فضلك سجل الدخول مرة أخرى.';
+
+  @override
+  String get profileUpdated => 'تم تحديث الملف الشخصي';
+
+  @override
+  String get save_changes => 'حفظ';
+
+  @override
+  String get noDocuments => 'لا توجد مستندات بعد';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get deleteDocumentConfirm => 'حذف هذا المستند؟';
+
+  @override
+  String get documentDeleted => 'تم حذف المستند';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get processingTitle => 'جاري المعالجة…';
+
+  @override
+  String get processingDesc =>
+      'جاري معالجة المستند الخاص بك.\nقد يستغرق ذلك لحظة.';
+
+  @override
+  String get failedTitle => 'فشلت المعالجة';
+
+  @override
+  String get refreshVideos => 'تحديث الفيديوهات';
+
+  @override
+  String get noVideos => 'لا توجد فيديوهات لهذا الموضوع بعد';
+
+  @override
+  String get noSummary => 'لا يوجد ملخص متاح بعد';
+
+  @override
+  String get loadFailed => 'تعذر التحميل. من فضلك حاول مرة أخرى.';
+
+  @override
+  String greeting(String name) {
+    return 'مرحباً، $name 👋';
+  }
 }

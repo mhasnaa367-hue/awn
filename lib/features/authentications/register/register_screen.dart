@@ -2,6 +2,8 @@ import 'package:awn/core/API/auth_setup.dart';
 import 'package:awn/core/API/domain/repositories/auth_repository.dart';
 import 'package:awn/core/API/errors/exception.dart';
 import 'package:awn/core/routesManager.dart';
+import 'package:awn/core/utils/responsive.dart';
+import 'package:awn/core/widget/app_snack_bar.dart';
 import 'package:awn/core/widget/login_header.dart';
 import 'package:awn/core/widget/gradient_button.dart';
 import 'package:awn/l10n/app_localizations.dart';
@@ -48,14 +50,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       if (!mounted) return;
-      // 3) Success -> go to the home screen.
-      Navigator.pushNamed(context, RoutesManager.homeScreen);
+      // 3) Success -> verify the email next (upload needs a verified email).
+      Navigator.pushNamed(context, RoutesManager.verifyEmail);
     } on ServerException catch (e) {
       // 4) The server said no (email taken, weak password, etc.).
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.errModel.errorMessage)),
-      );
+      AppSnackBar.show(context, e.errModel.errorMessage, isSuccess: false);
     } finally {
       // 5) Always stop the loading spinner.
       if (mounted) setState(() => _isLoading = false);
@@ -122,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           hintText: hint,
           hintStyle: GoogleFonts.inter(
             fontWeight: FontWeight.w400,
-            fontSize: 14,
+            fontSize: context.sp(14),
             color: colorScheme.onSurface.withOpacity(0.5),
           ),
           filled: true,
@@ -151,154 +151,147 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final l = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              LoginHeader(
-                title: l.registerTitle,
-                text: l.pleaseRegister,
-              ),
-              Positioned(
-                top: 250,
-                left: 20,
-                right: 20,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 50),
-
-                      _buildField(
-                        context,
-                        controller: _usernameController,
-                        hint: l.username,
-                        prefixIcon: Icons.person_outline,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l.enterUsername;
-                          }
-                          return null;
-                        },
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      _buildField(
-                        context,
-                        controller: _emailController,
-                        hint: l.email,
-                        prefixIcon: Icons.email_outlined,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l.enterEmail;
-                          }
-                          if (!value.contains("@")) {
-                            return l.validEmail;
-                          }
-                          return null;
-                        },
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      _buildField(
-                        context,
-                        controller: _passwordController,
-                        hint: l.password,
-                        prefixIcon: Icons.lock_outline,
-                        isPassword: true,
-                        obscure: _obscurePassword,
-                        onToggle: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l.enterPassword;
-                          }
-                          if (value.length < 6) {
-                            return l.passwordLength;
-                          }
-                          return null;
-                        },
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      _buildField(
-                        context,
-                        controller: _confirmController,
-                        hint: l.confirmPassword,
-                        prefixIcon: Icons.lock_outline,
-                        isPassword: true,
-                        obscure: _obscureConfirm,
-                        onToggle: () {
-                          setState(() {
-                            _obscureConfirm = !_obscureConfirm;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l.confirmPasswordError;
-                          }
-                          if (value != _passwordController.text) {
-                            return l.passwordsNotMatch;
-                          }
-                          return null;
-                        },
-                      ),
-
-                      const SizedBox(height: 30),
-
-                      _isLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : GradientButton(
-                              text: l.register,
-                              onTap: _register,
-                            ),
-
-                      const SizedBox(height: 20),
-
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              l.alreadyHaveAccount,
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                color: colorScheme.onSurface,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, RoutesManager.loginsrceen);
-                              },
-                              child: Text(
-                                l.signIn,
-                                style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  color: ColorsManager.green,
-                                  fontWeight: FontWeight.w600,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorsManager.green,
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: ResponsiveCenter(
+            child: Column(
+              children: [
+                LoginHeader(
+                  title: l.registerTitle,
+                  text: l.pleaseRegister,
+                ),
+                // Pull the form up so it overlaps the wavy header a little.
+                Transform.translate(
+                  offset: Offset(0, -context.hp(4)),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildField(
+                            context,
+                            controller: _usernameController,
+                            hint: l.username,
+                            prefixIcon: Icons.person_outline,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return l.enterUsername;
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: context.hp(2)),
+                          _buildField(
+                            context,
+                            controller: _emailController,
+                            hint: l.email,
+                            prefixIcon: Icons.email_outlined,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return l.enterEmail;
+                              }
+                              if (!value.contains("@")) {
+                                return l.validEmail;
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: context.hp(2)),
+                          _buildField(
+                            context,
+                            controller: _passwordController,
+                            hint: l.password,
+                            prefixIcon: Icons.lock_outline,
+                            isPassword: true,
+                            obscure: _obscurePassword,
+                            onToggle: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return l.enterPassword;
+                              }
+                              if (value.length < 6) {
+                                return l.passwordLength;
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: context.hp(2)),
+                          _buildField(
+                            context,
+                            controller: _confirmController,
+                            hint: l.confirmPassword,
+                            prefixIcon: Icons.lock_outline,
+                            isPassword: true,
+                            obscure: _obscureConfirm,
+                            onToggle: () {
+                              setState(() {
+                                _obscureConfirm = !_obscureConfirm;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return l.confirmPasswordError;
+                              }
+                              if (value != _passwordController.text) {
+                                return l.passwordsNotMatch;
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: context.hp(4)),
+                          _isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : GradientButton(
+                                  text: l.register,
+                                  onTap: _register,
                                 ),
-                              ),
+                          SizedBox(height: context.hp(2.5)),
+                          Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  l.alreadyHaveAccount,
+                                  style: GoogleFonts.inter(
+                                    fontSize: context.sp(14),
+                                    color: colorScheme.onSurface,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, RoutesManager.loginsrceen);
+                                  },
+                                  child: Text(
+                                    l.signIn,
+                                    style: GoogleFonts.inter(
+                                      fontSize: context.sp(14),
+                                      color: ColorsManager.green,
+                                      fontWeight: FontWeight.w600,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: ColorsManager.green,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: context.hp(2)),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -72,5 +72,32 @@
   "favoritesList": "Favorites",
   "historyList": "History",
   "profileLabel": "Profile",
-  "logOutUpper": "LOG OUT"
+  "logOutUpper": "LOG OUT",
+  "verifyEmailTitle": "Verify Email",
+  "verifyEmailDesc": "Please enter the 6 digit code\nsent to your email",
+  "emailVerified": "Email verified successfully",
+  "otpResent": "A new code has been sent",
+  "changePassword": "Change Password",
+  "currentPassword": "Current password",
+  "passwordChanged": "Password changed. Please log in again.",
+  "profileUpdated": "Profile updated",
+  "save_changes": "Save",
+  "noDocuments": "No documents yet",
+  "delete": "Delete",
+  "deleteDocumentConfirm": "Delete this document?",
+  "documentDeleted": "Document deleted",
+  "retry": "Retry",
+  "processingTitle": "Processing…",
+  "processingDesc": "Your document is being processed.\nThis may take a moment.",
+  "failedTitle": "Processing failed",
+  "refreshVideos": "Refresh videos",
+  "noVideos": "No videos found for this topic yet",
+  "noSummary": "No summary available yet",
+  "loadFailed": "Could not load. Please try again.",
+  "greeting": "Hi, {name} 👋",
+  "@greeting": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  }
 }

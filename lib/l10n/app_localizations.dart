@@ -535,6 +535,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'LOG OUT'**
   String get logOutUpper;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verifyEmailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the 6 digit code\nsent to your email'**
+  String get verifyEmailDesc;
+
+  /// No description provided for @emailVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verified successfully'**
+  String get emailVerified;
+
+  /// No description provided for @otpResent.
+  ///
+  /// In en, this message translates to:
+  /// **'A new code has been sent'**
+  String get otpResent;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPassword;
+
+  /// No description provided for @passwordChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed. Please log in again.'**
+  String get passwordChanged;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdated;
+
+  /// No description provided for @save_changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save_changes;
+
+  /// No description provided for @noDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'No documents yet'**
+  String get noDocuments;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deleteDocumentConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this document?'**
+  String get deleteDocumentConfirm;
+
+  /// No description provided for @documentDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Document deleted'**
+  String get documentDeleted;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @processingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing…'**
+  String get processingTitle;
+
+  /// No description provided for @processingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your document is being processed.\nThis may take a moment.'**
+  String get processingDesc;
+
+  /// No description provided for @failedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing failed'**
+  String get failedTitle;
+
+  /// No description provided for @refreshVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh videos'**
+  String get refreshVideos;
+
+  /// No description provided for @noVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'No videos found for this topic yet'**
+  String get noVideos;
+
+  /// No description provided for @noSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'No summary available yet'**
+  String get noSummary;
+
+  /// No description provided for @loadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load. Please try again.'**
+  String get loadFailed;
+
+  /// No description provided for @greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, {name} 👋'**
+  String greeting(String name);
 }
 
 class _AppLocalizationsDelegate
