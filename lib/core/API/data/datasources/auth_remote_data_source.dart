@@ -18,6 +18,9 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
 
+  // POST /api/auth/forgot-password -> send a reset / verification code.
+  Future<void> forgotPassword({required String email});
+
   // GET /api/auth/me  -> the current user.
   Future<UserModel> getMe();
 
@@ -69,10 +72,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     final response = await api.post(
       EndPoint.login,
-      data: {
-        ApiKey.email: email,
-        ApiKey.password: password,
-      },
+      data: {ApiKey.email: email, ApiKey.password: password},
     );
     return AuthResultModel.fromJson(response);
   }
@@ -86,11 +86,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     final response = await api.post(
       EndPoint.register,
-      data: {
-        ApiKey.name: name,
-        ApiKey.email: email,
-        ApiKey.password: password,
-      },
+      data: {ApiKey.name: name, ApiKey.email: email, ApiKey.password: password},
     );
     return AuthResultModel.fromJson(response);
   }
@@ -175,5 +171,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> resendOtp() async {
     await api.post(EndPoint.resendOtp);
+  }
+
+  // POST https://.../api/auth/forgot-password   body: { email }
+  @override
+  Future<void> forgotPassword({required String email}) async {
+    await api.post(EndPoint.forgotPassword, data: {ApiKey.email: email});
   }
 }

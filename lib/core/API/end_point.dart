@@ -14,6 +14,7 @@ class EndPoint {
   static String refresh = '/api/auth/refresh';
   static String logout = '/api/auth/logout';
   static String logoutAll = '/api/auth/logout-all';
+  static String forgotPassword = '/api/auth/verify-email';
 
   // ---- Email verification (OTP) ----
   static String sendOtp = '/api/auth/send-otp';
