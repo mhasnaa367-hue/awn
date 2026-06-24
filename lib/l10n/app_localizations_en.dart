@@ -300,6 +300,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loadFailed => 'Could not load. Please try again.';
 
   @override
+  String get logOutAllDevices => 'Log out of all devices';
+
+  @override
   String greeting(String name) {
     return 'Hi, $name 👋';
   }

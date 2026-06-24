@@ -18,8 +18,16 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
 
-  // POST /api/auth/forgot-password -> send a reset / verification code.
-  Future<void> forgotPassword({required String email});
+  // POST /api/auth/forgot-password -> emails a reset code. Returns the
+  // minutes until that code expires.
+  Future<int> forgotPassword({required String email});
+
+  // POST /api/auth/reset-password -> set a new password using the emailed code.
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  });
 
   // GET /api/auth/me  -> the current user.
   Future<UserModel> getMe();
@@ -175,7 +183,27 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   // POST https://.../api/auth/forgot-password   body: { email }
   @override
-  Future<void> forgotPassword({required String email}) async {
-    await api.post(EndPoint.forgotPassword, data: {ApiKey.email: email});
+  Future<int> forgotPassword({required String email}) async {
+    final response =
+        await api.post(EndPoint.forgotPassword, data: {ApiKey.email: email});
+    final data = (response is Map ? response[ApiKey.data] : null) ?? {};
+    return (data[ApiKey.expiresInMinutes] as num?)?.toInt() ?? 10;
+  }
+
+  // POST https://.../api/auth/reset-password   body: { email, code, newPassword }
+  @override
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
+    await api.post(
+      EndPoint.resetPassword,
+      data: {
+        ApiKey.email: email,
+        ApiKey.code: code,
+        ApiKey.newPassword: newPassword,
+      },
+    );
   }
 }

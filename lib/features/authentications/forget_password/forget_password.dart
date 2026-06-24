@@ -38,13 +38,15 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
+    final email = _emailController.text.trim();
     try {
-      // 2) Call the API. The server expects: email.
-      await _auth.forgotPassword(email: _emailController.text.trim());
+      // 2) Call the API. The server emails a 6-digit reset code.
+      await _auth.forgotPassword(email: email);
 
       if (!mounted) return;
-      // 3) Success -> go to the "mail sent" screen.
-      Navigator.pushNamed(context, RoutesManager.mailSent);
+      // 3) Success -> go to the "mail sent" screen, carrying the email so the
+      //    next steps can reset the password.
+      Navigator.pushNamed(context, RoutesManager.mailSent, arguments: email);
     } on ServerException catch (e) {
       // 4) The server said no (email not found, etc.).
       if (!mounted) return;

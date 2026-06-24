@@ -299,6 +299,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loadFailed => 'تعذر التحميل. من فضلك حاول مرة أخرى.';
 
   @override
+  String get logOutAllDevices => 'تسجيل الخروج من كل الأجهزة';
+
+  @override
   String greeting(String name) {
     return 'مرحباً، $name 👋';
   }

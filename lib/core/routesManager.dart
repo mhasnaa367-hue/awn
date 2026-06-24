@@ -59,11 +59,21 @@ class RoutesManager {
         }
         case mailSent:
         {
-          return CupertinoPageRoute(builder: (context) => MailSent());
+          // The email to send the reset code to is passed as the argument.
+          final email = settings.arguments is String
+              ? settings.arguments as String
+              : null;
+          return CupertinoPageRoute(builder: (context) => MailSent(email: email));
         }
         case verifyPassword:
         {
-          return CupertinoPageRoute(builder: (context) => VerifyPassword());
+          // Expects { 'email': ..., 'code': ... } from the MailSent screen.
+          final args = settings.arguments;
+          final email = args is Map ? args['email'] as String? : null;
+          final code = args is Map ? args['code'] as String? : null;
+          return CupertinoPageRoute(
+            builder: (context) => VerifyPassword(email: email, code: code),
+          );
         }
         case favorite:
         {

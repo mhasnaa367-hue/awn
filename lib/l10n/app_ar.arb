@@ -94,6 +94,7 @@
   "noVideos": "لا توجد فيديوهات لهذا الموضوع بعد",
   "noSummary": "لا يوجد ملخص متاح بعد",
   "loadFailed": "تعذر التحميل. من فضلك حاول مرة أخرى.",
+  "logOutAllDevices": "تسجيل الخروج من كل الأجهزة",
   "greeting": "مرحباً، {name} 👋",
   "@greeting": {
     "placeholders": {

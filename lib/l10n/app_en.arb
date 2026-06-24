@@ -94,6 +94,7 @@
   "noVideos": "No videos found for this topic yet",
   "noSummary": "No summary available yet",
   "loadFailed": "Could not load. Please try again.",
+  "logOutAllDevices": "Log out of all devices",
   "greeting": "Hi, {name} 👋",
   "@greeting": {
     "placeholders": {

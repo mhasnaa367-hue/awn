@@ -189,6 +189,38 @@ class _ProfileState extends State<Profile> {
         context, RoutesManager.loginsrceen, (route) => false);
   }
 
+  Future<void> _logoutAllDevices() async {
+    final l = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(l.logOutAllDevices),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l.logOut, style: const TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    try {
+      await _auth.logoutAll();
+    } catch (_) {
+      // Local session is cleared regardless of the network result.
+    }
+    if (!mounted) return;
+    await context.read<UserProvider>().clear();
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(
+        context, RoutesManager.loginsrceen, (route) => false);
+  }
+
   void _showLanguageDialog(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     showDialog(
@@ -360,6 +392,17 @@ class _ProfileState extends State<Profile> {
                                 color: colorScheme.onSurface.withOpacity(0.5),
                               ),
                               onTap: _logout,
+                            ),
+                            SizedBox(height: context.hp(1.5)),
+                            _OptionCard(
+                              icon: Icons.devices_other,
+                              iconColor: Colors.red,
+                              label: l.logOutAllDevices,
+                              trailing: Icon(
+                                Icons.chevron_right,
+                                color: colorScheme.onSurface.withOpacity(0.5),
+                              ),
+                              onTap: _logoutAllDevices,
                             ),
                           ],
                         ),

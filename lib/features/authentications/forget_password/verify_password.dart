@@ -1,6 +1,10 @@
+import 'package:awn/core/API/auth_setup.dart';
+import 'package:awn/core/API/domain/repositories/auth_repository.dart';
+import 'package:awn/core/API/errors/exception.dart';
 import 'package:awn/core/routesManager.dart';
 import 'package:awn/core/utils/responsive.dart';
 import 'package:awn/core/widget/Appbar.dart';
+import 'package:awn/core/widget/app_snack_bar.dart';
 import 'package:awn/core/widget/custom_text_field.dart';
 import 'package:awn/core/widget/gradient_button.dart';
 import 'package:awn/l10n/app_localizations.dart';
@@ -12,7 +16,11 @@ import '../../../core/resources/assets_manager.dart';
 import '../../../core/resources/colors_manager.dart';
 
 class VerifyPassword extends StatefulWidget {
-  const VerifyPassword({super.key});
+  const VerifyPassword({super.key, this.email, this.code});
+
+  // Carried from the previous screens to complete the reset.
+  final String? email;
+  final String? code;
 
   @override
   State<VerifyPassword> createState() => _VerifyPasswordState();
@@ -20,8 +28,11 @@ class VerifyPassword extends StatefulWidget {
 
 class _VerifyPasswordState extends State<VerifyPassword> {
   final _formKey = GlobalKey<FormState>();
+  final AuthRepository _auth = createAuthRepository();
+
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
+  bool _isLoading = false;
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
 
@@ -30,6 +41,37 @@ class _VerifyPasswordState extends State<VerifyPassword> {
     _passwordController.dispose();
     _confirmController.dispose();
     super.dispose();
+  }
+
+  Future<void> _resetPassword() async {
+    final l = AppLocalizations.of(context)!;
+    if (!_formKey.currentState!.validate()) return;
+
+    // We need the email + code that were carried here. If they're missing
+    // (e.g. the screen was opened directly), bail out gracefully.
+    if (widget.email == null || widget.code == null) {
+      AppSnackBar.show(context, l.loadFailed, isSuccess: false);
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await _auth.resetPassword(
+        email: widget.email!,
+        code: widget.code!,
+        newPassword: _passwordController.text,
+      );
+      if (!mounted) return;
+      AppSnackBar.show(context, l.passwordChanged, isSuccess: true);
+      // Reset done -> back to login, clearing the whole flow.
+      Navigator.pushNamedAndRemoveUntil(
+          context, RoutesManager.loginsrceen, (route) => false);
+    } on ServerException catch (e) {
+      if (!mounted) return;
+      AppSnackBar.show(context, e.errModel.errorMessage, isSuccess: false);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -136,14 +178,12 @@ class _VerifyPasswordState extends State<VerifyPassword> {
 
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
-                    child: GradientButton(
-                      text: l.save,
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.pushNamed(context, RoutesManager.homeScreen);
-                        }
-                      },
-                    ),
+                    child: _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : GradientButton(
+                            text: l.save,
+                            onTap: _resetPassword,
+                          ),
                   ),
 
                   SizedBox(height: context.hp(2.5)),

@@ -19,9 +19,17 @@ abstract class AuthRepository {
     required String password,
   });
 
-  // Ask the server to send a password-reset / verification code to this email.
-  Future<void> forgotPassword({
+  // Ask the server to email a password-reset code. Returns minutes until it
+  // expires.
+  Future<int> forgotPassword({
     required String email,
+  });
+
+  // Set a new password using the emailed reset code.
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
   });
 
   // Get the currently logged-in user.

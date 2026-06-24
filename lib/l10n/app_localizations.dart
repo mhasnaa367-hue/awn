@@ -662,6 +662,12 @@ abstract class AppLocalizations {
   /// **'Could not load. Please try again.'**
   String get loadFailed;
 
+  /// No description provided for @logOutAllDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of all devices'**
+  String get logOutAllDevices;
+
   /// No description provided for @greeting.
   ///
   /// In en, this message translates to:
